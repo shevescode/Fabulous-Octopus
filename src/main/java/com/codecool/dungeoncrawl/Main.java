@@ -26,6 +26,8 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Button button = new Button("Pick up item");
+    GridPane ui = new GridPane();
+    boolean showPickUpButton = false;
 
 
     public static void main(String[] args) {
@@ -34,25 +36,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane ui = new GridPane();
+
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
-
+        // first row
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(button, 2, 0);
+        // second row
+        ui.add(new Label("Inventory: "),  0, 1);
 
-        // adding button and label to track changes after click
-        ui.add(button, 0, 1);
         button.setFocusTraversable(false);
-        Label l = new Label("button not selected");
-        ui.add(l, 0, 2);
-
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                l.setText("   button   selected    ");
-            }
-        });
-
+        button.setVisible(showPickUpButton);
 
         BorderPane borderPane = new BorderPane();
 
@@ -93,10 +88,15 @@ public class Main extends Application {
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        showPickUpButton = false;
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
+                    if(cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
+                        showPickUpButton = true;
+                        buttonOnClick(cell);
+                    }
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x, y);
@@ -106,5 +106,25 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        button.setVisible(showPickUpButton);
+        updateInventory();
     }
+
+    private void buttonOnClick(Cell cell) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                map.getPlayer().pickUpItem(cell.getItem());
+                cell.setItem(null);
+                refresh();
+            }
+        });
+    }
+
+    private void updateInventory() {
+        if(map.getPlayer().getInventory().size() + 2 > ui.getRowCount()) {
+            ui.add(new Label(map.getPlayer().getInventory().get(ui.getRowCount() - 2).getTileName()),  0, ui.getRowCount());
+        }
+    }
+
+
 }
