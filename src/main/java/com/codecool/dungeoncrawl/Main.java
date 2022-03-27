@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -68,6 +69,7 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        monstersMove();
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -127,6 +129,12 @@ public class Main extends Application {
     private void updateInventory() {
         if(map.getPlayer().getInventory().size() + 2 > ui.getRowCount()) {
             ui.add(new Label(map.getPlayer().getInventory().get(ui.getRowCount() - 2).getTileName()),  0, ui.getRowCount());
+        }
+    }
+
+    private void monstersMove() {
+        for (Actor monster: map.getAllMonsters()) {
+            monster.move(-1, -1);
         }
     }
 

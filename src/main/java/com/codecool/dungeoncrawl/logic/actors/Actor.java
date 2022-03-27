@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public abstract class Actor implements Drawable {
     private Cell cell;
     private int health = 10;
@@ -53,10 +55,31 @@ public abstract class Actor implements Drawable {
 
     public abstract int getAttack();
 
-    private void moveToNextCell(Cell nextCell){
+    public Cell getNextCell() {
+        Cell nextCell = this.getCell().getNeighbor(0,0);
+        int randomDirection = ThreadLocalRandom.current().nextInt(0, 4 + 1);
+        switch(randomDirection) {
+            case 1 -> {
+                nextCell = this.getCell().getNeighbor(0, -1);
+            }
+            case 2 -> {
+                nextCell = this.getCell().getNeighbor(0, 1);
+            }
+            case 3 -> {
+                nextCell = this.getCell().getNeighbor(-1, 0);
+            }
+            case 4 -> {
+                nextCell = this.getCell().getNeighbor(1, 0);
+            }
+        }
+        return nextCell;
+    }
+
+    void moveToNextCell(Cell nextCell){
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
     }
+
 
 }
