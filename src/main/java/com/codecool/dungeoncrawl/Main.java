@@ -25,6 +25,7 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label attackLabel = new Label();
     Button button = new Button("Pick up item");
     GridPane ui = new GridPane();
     boolean showPickUpButton = false;
@@ -42,9 +43,11 @@ public class Main extends Application {
         // first row
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("Attack"), 0, 1);
+        ui.add(attackLabel, 1, 1);
         ui.add(button, 2, 0);
         // second row
-        ui.add(new Label("Inventory: "),  0, 1);
+        ui.add(new Label("Inventory: "),  0, 2);
 
         button.setFocusTraversable(false);
         button.setVisible(showPickUpButton);
@@ -106,6 +109,7 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        attackLabel.setText("" + map.getPlayer().getAttack());
         button.setVisible(showPickUpButton);
         updateInventory();
     }

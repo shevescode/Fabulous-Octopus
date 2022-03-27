@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Sword;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,19 @@ public class Player extends Actor {
     }
 
     public void pickUpItem(Item item) {
+        if(item instanceof Sword) {
+            attack += ((Sword) item).getDamage();
+        }
         inventory.add(item);
     }
 
     public List<Item> getInventory() {
         return inventory;
+    }
+
+    @Override
+    public int getAttack() {
+        return attack;
     }
 
     @Override
