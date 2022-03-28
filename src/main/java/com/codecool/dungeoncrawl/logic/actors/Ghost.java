@@ -1,20 +1,18 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class Ghost extends Actor {
+public class Ghost extends Actor implements Monster{
     private int attack = 10;
 
     public Ghost(Cell cell) {
         super(cell);
+        setHealth(10);
     }
 
-    @Override
-    public void move(int dx, int dy) {
-        Cell nextCell = this.getNextCell();
+
+    public void monsterMakeMove() {
+        Cell nextCell = this.getNextCellForMonsterMove();
         if(nextCell != null) {
             if(nextCell.getActor() == null) {
                 moveToNextCell(nextCell);
@@ -27,10 +25,6 @@ public class Ghost extends Actor {
     @Override
     public String getTileName() {
         return "ghost";
-    }
-
-    @Override
-    public void attackMonster(Actor actor) {
     }
 
     @Override

@@ -8,12 +8,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
-    private int health = 10;
+    private int health;
 
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
     }
+
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
@@ -21,7 +22,7 @@ public abstract class Actor implements Drawable {
             if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
                 moveToNextCell(nextCell);
             } else if (nextCell.getActor() != null) {
-                this.attackMonster(nextCell.getActor());
+                ((Player) this).attackMonster(nextCell.getActor());
 
                 if(nextCell.getActor().getHealth() <= 0) {
                     nextCell.removeDeadMonster();
@@ -51,11 +52,9 @@ public abstract class Actor implements Drawable {
         health -= i;
     }
 
-    public abstract void attackMonster(Actor actor);
-
     public abstract int getAttack();
 
-    public Cell getNextCell() {
+    public Cell getNextCellForMonsterMove() {
         Cell nextCell = this.getCell().getNeighbor(0,0);
         int randomDirection = ThreadLocalRandom.current().nextInt(0, 4 + 1);
         switch(randomDirection) {
@@ -81,5 +80,7 @@ public abstract class Actor implements Drawable {
         cell = nextCell;
     }
 
-
+    public void setHealth(int health) {
+        this.health = health;
+    }
 }

@@ -3,18 +3,15 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class Skeleton extends Actor {
+public class Skeleton extends Actor implements Monster {
     private int attack = 2;
 
     public Skeleton(Cell cell) {
         super(cell);
+        setHealth(7);
     }
-
-    @Override
-    public void move(int dx, int dy) {
-        Cell nextCell = this.getNextCell();
+    public void monsterMakeMove() {
+        Cell nextCell = this.getNextCellForMonsterMove();
         if(nextCell != null) {
         if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
                 moveToNextCell(nextCell);
@@ -27,10 +24,6 @@ public class Skeleton extends Actor {
     @Override
     public String getTileName() {
         return "skeleton";
-    }
-
-    @Override
-    public void attackMonster(Actor actor) {
     }
 
     @Override

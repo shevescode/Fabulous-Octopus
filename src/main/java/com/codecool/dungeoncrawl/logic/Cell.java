@@ -65,6 +65,10 @@ public class Cell implements Drawable {
         return y;
     }
 
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
     public void removeDeadMonster() {
         this.setActor(null);
     }

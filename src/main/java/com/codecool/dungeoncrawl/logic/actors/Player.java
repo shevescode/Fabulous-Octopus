@@ -13,6 +13,7 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
+        setHealth(20);
         inventory = new ArrayList<>();
     }
 
@@ -36,7 +37,6 @@ public class Player extends Actor {
         return attack;
     }
 
-    @Override
     public void attackMonster(Actor actor) {
         actor.subtractHealthPoints(attack);
         this.subtractHealthPoints(actor.getAttack());
