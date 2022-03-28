@@ -15,23 +15,6 @@ public abstract class Actor implements Drawable {
         this.cell.setActor(this);
     }
 
-
-    public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
-        if(nextCell != null) {
-            if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
-                moveToNextCell(nextCell);
-            } else if (nextCell.getActor() != null) {
-                ((Player) this).attackMonster(nextCell.getActor());
-
-                if(nextCell.getActor().getHealth() <= 0) {
-                    nextCell.removeDeadMonster();
-                    moveToNextCell(nextCell);
-                }
-            }
-        }
-    }
-
     public int getHealth() {
         return health;
     }
@@ -55,9 +38,9 @@ public abstract class Actor implements Drawable {
     public abstract int getAttack();
 
     public Cell getNextCellForMonsterMove() {
-        Cell nextCell = this.getCell().getNeighbor(0,0);
+        Cell nextCell = this.getCell().getNeighbor(0, 0);
         int randomDirection = ThreadLocalRandom.current().nextInt(0, 4 + 1);
-        switch(randomDirection) {
+        switch (randomDirection) {
             case 1 -> {
                 nextCell = this.getCell().getNeighbor(0, -1);
             }
@@ -74,7 +57,7 @@ public abstract class Actor implements Drawable {
         return nextCell;
     }
 
-    void moveToNextCell(Cell nextCell){
+    void moveToNextCell(Cell nextCell) {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;

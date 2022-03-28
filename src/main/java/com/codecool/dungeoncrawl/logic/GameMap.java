@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class GameMap {
         List<Actor> monsterList = new ArrayList<>();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if(cells[x][y].getActor() != null && cells[x][y].getActor() != player) {
+                if(cells[x][y].getActor() instanceof Monster) {
                     monsterList.add(cells[x][y].getActor());
                 }
             }

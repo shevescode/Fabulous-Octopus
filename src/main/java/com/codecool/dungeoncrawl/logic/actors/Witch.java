@@ -28,13 +28,13 @@ public class Witch extends Actor implements Monster {
     @Override
     public void monsterMakeMove() {
         mana += 1;
-        if(mana == 10) {
+        if (mana == 10) {
             GameMap map = this.getCell().getGameMap();
-            int randomX = ThreadLocalRandom.current().nextInt(0, map.getWidth() + 1);
-            int randomY = ThreadLocalRandom.current().nextInt(0, map.getHeight() + 1);
+            int randomX = ThreadLocalRandom.current().nextInt(0, map.getWidth() - 1 + 1);
+            int randomY = ThreadLocalRandom.current().nextInt(0, map.getHeight() - 1 + 1);
             Cell nextCell = map.getCell(randomX, randomY);
-            if(nextCell != null) {
-                if(nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
+            if (nextCell != null) {
+                if (nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
                     moveToNextCell(nextCell);
                 }
             }

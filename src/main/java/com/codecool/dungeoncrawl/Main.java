@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -27,11 +28,8 @@ public class Main extends Application {
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
-    Label healthLabel = new Label();
-    Label attackLabel = new Label();
-    Button button = new Button("Pick up item");
-    GridPane ui = new GridPane();
-    boolean showPickUpButton = false;
+
+    private RightUI rightUI;
 
 
     public static void main(String[] args) {
@@ -40,25 +38,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.rightUI = new RightUI(map.getPlayer());
 
-        ui.setPrefWidth(200);
-        ui.setPadding(new Insets(10));
-        // first row
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(healthLabel, 1, 0);
-        ui.add(new Label("Attack"), 0, 1);
-        ui.add(attackLabel, 1, 1);
-        ui.add(button, 2, 0);
-        // second row
-        ui.add(new Label("Inventory: "),  0, 2);
-
-        button.setFocusTraversable(false);
-        button.setVisible(showPickUpButton);
+        map.getPlayer().setInventory(rightUI.getInventory().getItems());
 
         BorderPane borderPane = new BorderPane();
 
         borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
+        borderPane.setRight(rightUI);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -71,7 +58,6 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        monstersMove();
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -86,23 +72,24 @@ public class Main extends Application {
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1,0);
+                map.getPlayer().move(1, 0);
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
+        monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        showPickUpButton = false;
+        rightUI.hideButton();
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    if(cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
-                        showPickUpButton = true;
-                        buttonOnClick(cell);
+                    if (cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
+                        rightUI.showPickButton();
+                        rightUI.buttonOnClick(cell);
                     }
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else if (cell.getItem() != null) {
@@ -112,30 +99,14 @@ public class Main extends Application {
                 }
             }
         }
-        healthLabel.setText("" + map.getPlayer().getHealth());
-        attackLabel.setText("" + map.getPlayer().getAttack());
-        button.setVisible(showPickUpButton);
-        updateInventory();
+
+        rightUI.setHealthLabel();
+        rightUI.setAttackLabel();
     }
 
-    private void buttonOnClick(Cell cell) {
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                map.getPlayer().pickUpItem(cell.getItem());
-                cell.setItem(null);
-                refresh();
-            }
-        });
-    }
-
-    private void updateInventory() {
-        if(map.getPlayer().getInventory().size() + 3 > ui.getRowCount()) {
-            ui.add(new Label(map.getPlayer().getInventory().get(ui.getRowCount() - 3).getTileName()),  0, ui.getRowCount());
-        }
-    }
 
     private void monstersMove() {
-        for (Actor monster: map.getAllMonsters()) {
+        for (Actor monster : map.getAllMonsters()) {
             ((Monster) monster).monsterMakeMove();
         }
     }
