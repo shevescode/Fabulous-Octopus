@@ -8,11 +8,12 @@ import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(String txtFile) {
+        InputStream is = MapLoader.class.getResourceAsStream(txtFile);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -26,44 +27,37 @@ public class MapLoader {
                 if (x < line.length()) {
                     Cell cell = map.getCell(x, y);
                     switch (line.charAt(x)) {
-                        case ' ':
-                            cell.setType(CellType.EMPTY);
-                            break;
-                        case '#':
-                            cell.setType(CellType.WALL);
-                            break;
-                        case '.':
-                            cell.setType(CellType.FLOOR);
-                            break;
-                        case 'd':
-                            cell.setType(CellType.CLOSED_DOOR);
-                            break;
-                        case 's':
+                        case ' ' -> cell.setType(CellType.EMPTY);
+                        case '#' -> cell.setType(CellType.WALL);
+                        case '.' -> cell.setType(CellType.FLOOR);
+                        case 'd' -> cell.setType(CellType.CLOSED_DOOR);
+                        case 'h' -> cell.setType(CellType.STAIRS_DOWN);
+                        case 'u' -> cell.setType(CellType.STAIRS_UP);
+                        case 's' -> {
                             cell.setType(CellType.FLOOR);
                             new Skeleton(cell);
-                            break;
-                        case '@':
+                        }
+                        case '@' -> {
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
-                            break;
-                        case 'x':
+                            map.setPlayerCell(cell);
+                        }
+                        case 'x' -> {
                             cell.setType(CellType.FLOOR);
                             new Sword(cell);
-                            break;
-                        case 'k':
+                        }
+                        case 'k' -> {
                             cell.setType(CellType.FLOOR);
                             new Key(cell);
-                            break;
-                        case 'g':
+                        }
+                        case 'g' -> {
                             cell.setType(CellType.EMPTY);
                             new Ghost(cell);
-                            break;
-                        case 'w':
+                        }
+                        case 'w' -> {
                             cell.setType(CellType.EMPTY);
                             new Witch(cell);
-                            break;
-                        default:
-                            throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
+                        }
+                        default -> throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
                 }
             }

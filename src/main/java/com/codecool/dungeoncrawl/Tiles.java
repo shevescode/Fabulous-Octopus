@@ -26,6 +26,8 @@ public class Tiles {
         tileMap.put("empty", new Tile(0, 0));
         tileMap.put("wall", new Tile(10, 17));
         tileMap.put("floor", new Tile(2, 0));
+        tileMap.put("stairsUp", new Tile(2,6));
+        tileMap.put("stairsDown", new Tile(3, 6));
         tileMap.put("closedDoor", new Tile(0,9));
         tileMap.put("openDoor", new Tile(2, 9));
         tileMap.put("player", new Tile(25, 8));

@@ -12,7 +12,9 @@ public class GameMap {
     private int height;
     private Cell[][] cells;
 
+
     private Player player;
+    private Cell playerCell;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -23,6 +25,14 @@ public class GameMap {
                 cells[x][y] = new Cell(this, x, y, defaultCellType);
             }
         }
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
     }
 
     public Cell getCell(int x, int y) {
@@ -55,5 +65,13 @@ public class GameMap {
             }
         }
         return monsterList;
+    }
+
+    public void setPlayerCell(Cell cell) {
+        playerCell = cell;
+    }
+
+    public Cell getFirstPlayerCell() {
+        return playerCell;
     }
 }

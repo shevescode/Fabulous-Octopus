@@ -21,7 +21,7 @@ public class Player extends Actor {
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if (nextCell != null) {
-            if ((nextCell.getType() == CellType.FLOOR && nextCell.getActor() == null) || nextCell.getType() == CellType.OPEN_DOOR) {
+            if ((nextCell.getType() == CellType.FLOOR && nextCell.getActor() == null) || nextCell.getType() == CellType.OPEN_DOOR || nextCell.getType() == CellType.STAIRS_DOWN || nextCell.getType() == CellType.STAIRS_UP) {
                 moveToNextCell(nextCell);
             } else if (nextCell.getActor() instanceof Monster) {
                 attackMonster(nextCell.getActor());
@@ -78,8 +78,6 @@ public class Player extends Actor {
                 .get();
         System.out.println(key);
         inventory.remove(key);
-
-
     }
 
 

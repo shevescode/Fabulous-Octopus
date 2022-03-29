@@ -18,6 +18,6 @@ public class Sword extends Item{
 
     @Override
     public String toString() {
-        return "Sword " + damage + " points";
+        return "Sword " + damage + " damage";
     }
 }
