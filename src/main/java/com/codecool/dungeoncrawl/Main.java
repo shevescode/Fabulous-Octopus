@@ -16,6 +16,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import static com.sun.javafx.application.PlatformImpl.exit;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
     int gameLevel = 0;
@@ -110,24 +112,37 @@ public class Main extends Application {
     }
 
     private GameMap mapSave;
+    private GameMap map1 = null;
+    private GameMap map2 = null;
     private void changeMap(int i) {
         gameLevel += i;
+        System.out.println(gameLevel);
+
 
         String level;
         switch(gameLevel) {
             case 0 -> {
-                level = "/map.txt";
-                map = mapSave;
-
+                map2 = map;
+                map2.getPlayer().getCell().setActor(null);
+                map2.setPlayer(null);
+                map = map1;
+                player.setCell(map.getCell(20,15));
+                map.getCell(20,15).setActor(player);
+                map.setPlayer(player);
             }
             case 1 -> {
-                mapSave = map;
-                mapSave.getPlayer().move(-1,0);
-                level = "/level2.txt";
-                map = MapLoader.loadMap(level);
+                map1 = map;
+                map1.getPlayer().getCell().setActor(null);
+                map1.setPlayer(null);
+                if(map2 == null) {
+                    map2 = MapLoader.loadMap("/level2.txt");
+                }
+                map = map2;
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
+
+
             }
             default -> {
                 level = "/easter.txt";
