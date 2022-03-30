@@ -25,7 +25,7 @@ public class Main extends Application {
 
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
-            map.getHeight() * Tiles.TILE_WIDTH);
+            20 * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
 
     private RightUI rightUI;
@@ -63,10 +63,12 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP -> {
                 map.getPlayer().move(0, -1);
+                decrementYOffset();
                 refresh();
             }
             case DOWN -> {
                 map.getPlayer().move(0, 1);
+                incrementYOffset();
                 refresh();
             }
             case LEFT -> {
@@ -80,72 +82,97 @@ public class Main extends Application {
         }
     }
 
+    private void incrementYOffset() {
+        if (yOffset + 20 < map.getHeight()) {
+            if (player.getY() > 15) {
+                yOffset += 1;
+            }
+        }
+    }
+
+    private void decrementYOffset() {
+        if (yOffset - 1 >= 0) {
+            if (player.getY() - yOffset <= 5) {
+                yOffset -= 1;
+            }
+        }
+    }
+
+    private int yOffset = 0;
+
     private void refresh() {
+        System.out.println("y offset: " + yOffset);
         monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
+
         for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+            for (int y = getYStart(yOffset); y < getYEnd(yOffset); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
                     if (cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x, y - yOffset);
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y);
+                    Tiles.drawTile(context, cell.getItem(), x, y - yOffset);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x, y - yOffset);
                 }
             }
         }
 
         rightUI.setHealthLabel();
         rightUI.setAttackLabel();
-        if(playerGoDownstairs()) {
+        if (playerGoDownstairs()) {
             changeMap(1);
         } else if (playerGoUpstairs()) {
             changeMap(-1);
         }
     }
 
-    private GameMap mapSave;
+    private int getYStart(int yOffset) {
+        return Math.max(yOffset - 20, 0);
+    }
+
+    private int getYEnd(int yOffset) {
+        return Math.min(yOffset + 20, map.getHeight());
+    }
+
+
     private GameMap map1 = null;
     private GameMap map2 = null;
+
     private void changeMap(int i) {
         gameLevel += i;
         System.out.println(gameLevel);
-
-
-        String level;
-        switch(gameLevel) {
+        switch (gameLevel) {
             case 0 -> {
                 map2 = map;
                 map2.getPlayer().getCell().setActor(null);
                 map2.setPlayer(null);
                 map = map1;
-                player.setCell(map.getCell(20,15));
-                map.getCell(20,15).setActor(player);
+                player.setCell(map.getCell(20, 15));
+                map.getCell(20, 15).setActor(player);
                 map.setPlayer(player);
             }
             case 1 -> {
                 map1 = map;
                 map1.getPlayer().getCell().setActor(null);
                 map1.setPlayer(null);
-                if(map2 == null) {
+
+                if (map2 == null) {
                     map2 = MapLoader.loadMap("/level2.txt");
                 }
                 map = map2;
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
-
-
             }
             default -> {
-                level = "/easter.txt";
+
             }
         }
 
