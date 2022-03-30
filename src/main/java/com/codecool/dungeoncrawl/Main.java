@@ -61,22 +61,27 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
-            case UP -> {
+            case UP:
+            case W:
                 map.getPlayer().move(0, -1);
                 refresh();
-            }
-            case DOWN -> {
+                break;
+            case S:
+            case DOWN:
                 map.getPlayer().move(0, 1);
                 refresh();
-            }
-            case LEFT -> {
+                break;
+            case A:
+            case LEFT:
                 map.getPlayer().move(-1, 0);
                 refresh();
-            }
-            case RIGHT -> {
+                break;
+            case D:
+            case RIGHT:
                 map.getPlayer().move(1, 0);
                 refresh();
-            }
+                break;
+
         }
     }
 
@@ -104,7 +109,7 @@ public class Main extends Application {
 
         rightUI.setHealthLabel();
         rightUI.setAttackLabel();
-        if(playerGoDownstairs()) {
+        if (playerGoDownstairs()) {
             changeMap(1);
         } else if (playerGoUpstairs()) {
             changeMap(-1);
@@ -114,27 +119,28 @@ public class Main extends Application {
     private GameMap mapSave;
     private GameMap map1 = null;
     private GameMap map2 = null;
+
     private void changeMap(int i) {
         gameLevel += i;
         System.out.println(gameLevel);
 
 
         String level;
-        switch(gameLevel) {
+        switch (gameLevel) {
             case 0 -> {
                 map2 = map;
                 map2.getPlayer().getCell().setActor(null);
                 map2.setPlayer(null);
                 map = map1;
-                player.setCell(map.getCell(20,15));
-                map.getCell(20,15).setActor(player);
+                player.setCell(map.getCell(20, 15));
+                map.getCell(20, 15).setActor(player);
                 map.setPlayer(player);
             }
             case 1 -> {
                 map1 = map;
                 map1.getPlayer().getCell().setActor(null);
                 map1.setPlayer(null);
-                if(map2 == null) {
+                if (map2 == null) {
                     map2 = MapLoader.loadMap("/level2.txt");
                 }
                 map = map2;

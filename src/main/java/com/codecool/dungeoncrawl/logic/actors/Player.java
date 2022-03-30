@@ -2,12 +2,10 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
-import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.items.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Player extends Actor {
     private List<Item> inventory;
@@ -30,9 +28,23 @@ public class Player extends Actor {
                     nextCell.removeDeadMonster();
                     moveToNextCell(nextCell);
                 }
-            } else if (nextCell.getType() == CellType.CLOSED_DOOR && hasKey()) {
-                openDoor(nextCell);
-                moveToNextCell(nextCell);
+
+            } else if (nextCell.getType() == CellType.CLOSED_DOOR) {
+                if (hasKey()) {
+                    nextCell.setType(CellType.OPEN_DOOR);
+                    openStaticObject();
+                    moveToNextCell(nextCell);
+                } else {
+//                    System.out.println("Find a proper key!");
+//                    add alert for player
+
+                }
+
+            } else if (nextCell.getType() == CellType.CLOSED_CHEST && hasKey()) {
+                openStaticObject();
+                nextCell.setType(CellType.OPEN_CHEST);
+
+//                obtainObject();
             }
         }
     }
@@ -67,18 +79,21 @@ public class Player extends Actor {
     }
 
     private boolean hasKey() {
-        return inventory.stream().anyMatch(Item -> Item instanceof Key);
+        return inventory.stream().anyMatch(Item -> (Item instanceof DoorKey || Item instanceof ChestKey));
     }
 
-    private void openDoor(Cell cell) {
-        cell.setType(CellType.OPEN_DOOR);
+    private void openStaticObject() {
+//        cell.setType(CellType.OPEN_DOOR);
         Item key = inventory.stream()
-                .filter(Item -> Item instanceof Key)
-                .findFirst()
-                .get();
+                .filter(Item -> (Item instanceof DoorKey || Item instanceof ChestKey))
+                .findAny().get();
+
         System.out.println(key);
         inventory.remove(key);
     }
 
+//    private void obtainObject() {
+// random integer and switch statement for chosing item -> health potion, sword, hammer, łuk XDDD
+//    }
 
 }

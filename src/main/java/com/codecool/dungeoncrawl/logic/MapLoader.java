@@ -1,14 +1,14 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Witch;
-import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.Chest;
+import com.codecool.dungeoncrawl.logic.items.ChestKey;
+import com.codecool.dungeoncrawl.logic.items.DoorKey;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class MapLoader {
@@ -47,7 +47,14 @@ public class MapLoader {
                         }
                         case 'k' -> {
                             cell.setType(CellType.FLOOR);
-                            new Key(cell);
+                            new DoorKey(cell);
+                        }
+                        case 'a' -> {
+                            cell.setType(CellType.FLOOR);
+                            new ChestKey(cell);
+                        }
+                        case 'c' -> {
+                            cell.setType(CellType.CLOSED_CHEST);
                         }
                         case 'g' -> {
                             cell.setType(CellType.EMPTY);
