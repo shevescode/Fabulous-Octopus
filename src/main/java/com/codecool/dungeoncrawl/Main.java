@@ -85,10 +85,7 @@ public class Main extends Application {
     }
 
 
-
     private void refresh() {
-        System.out.println("x " + map.getXOffset());
-        System.out.println("y " + map.getYOffset());
         monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -102,11 +99,11 @@ public class Main extends Application {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
-                    Tiles.drawTile(context, cell.getActor(), x -map.getXOffset(), y - map.getYOffset());
+                    Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else {
-                    Tiles.drawTile(context, cell, x- map.getXOffset(), y - map.getYOffset());
+                    Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }
             }
         }
@@ -125,8 +122,9 @@ public class Main extends Application {
     }
 
     private int getYEnd() {
-        return Math.min(map.getYOffset()+ 20, map.getHeight());
+        return Math.min(map.getYOffset() + 20, map.getHeight());
     }
+
     private int getXStart() {
         return Math.max(map.getXOffset() - 25, 0);
     }
