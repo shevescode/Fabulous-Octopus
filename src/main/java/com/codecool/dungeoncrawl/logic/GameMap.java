@@ -10,6 +10,8 @@ import java.util.List;
 public class GameMap {
     private int width;
     private int height;
+    private int XOffset = 0;
+    private int YOffset = 0;
     private Cell[][] cells;
 
 
@@ -73,5 +75,45 @@ public class GameMap {
 
     public Cell getFirstPlayerCell() {
         return playerCell;
+    }
+
+    public void incrementYOffset() {
+        if (YOffset + 20 < getHeight()) {
+            if (player.getY() > 13 + YOffset) {
+                YOffset += 1;
+            }
+        }
+    }
+
+    public void decrementYOffset() {
+        if (YOffset - 1 >= 0) {
+            if (player.getY() - YOffset < 6) {
+                YOffset -= 1;
+            }
+        }
+    }
+    public void incrementXOffset() {
+        if (XOffset + 25 < getWidth()) {
+
+            if (player.getX() > 18 + XOffset) {
+                XOffset += 1;
+            }
+        }
+    }
+
+    public void decrementXOffset() {
+        if (XOffset - 1 >= 0) {
+            if (player.getX() - XOffset < 6) {
+                XOffset -= 1;
+            }
+        }
+    }
+
+    public int getXOffset() {
+        return XOffset;
+    }
+
+    public int getYOffset() {
+        return YOffset;
     }
 }

@@ -24,7 +24,7 @@ public class Main extends Application {
     Player player = new Player(map.getFirstPlayerCell());
 
     Canvas canvas = new Canvas(
-            map.getWidth() * Tiles.TILE_WIDTH,
+            25 * Tiles.TILE_WIDTH,
             20 * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
 
@@ -63,63 +63,50 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP -> {
                 map.getPlayer().move(0, -1);
-                decrementYOffset();
+                map.decrementYOffset();
                 refresh();
             }
             case DOWN -> {
                 map.getPlayer().move(0, 1);
-                incrementYOffset();
+                map.incrementYOffset();
                 refresh();
             }
             case LEFT -> {
                 map.getPlayer().move(-1, 0);
+                map.decrementXOffset();
                 refresh();
             }
             case RIGHT -> {
                 map.getPlayer().move(1, 0);
+                map.incrementXOffset();
                 refresh();
             }
         }
     }
 
-    private void incrementYOffset() {
-        if (yOffset + 20 < map.getHeight()) {
-            if (player.getY() > 13 + yOffset) {
-                yOffset += 1;
-            }
-        }
-    }
 
-    private void decrementYOffset() {
-        if (yOffset - 1 >= 0) {
-            if (player.getY() - yOffset < 6) {
-                yOffset -= 1;
-            }
-        }
-    }
-
-    private int yOffset = 0;
 
     private void refresh() {
-        System.out.println("y offset: " + yOffset);
+        System.out.println("x " + map.getXOffset());
+        System.out.println("y " + map.getYOffset());
         monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
 
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = getYStart(yOffset); y < getYEnd(yOffset); y++) {
+        for (int x = getXStart(); x < getXEnd(); x++) {
+            for (int y = getYStart(); y < getYEnd(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
                     if (cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
-                    Tiles.drawTile(context, cell.getActor(), x, y - yOffset);
+                    Tiles.drawTile(context, cell.getActor(), x -map.getXOffset(), y - map.getYOffset());
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y - yOffset);
+                    Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else {
-                    Tiles.drawTile(context, cell, x, y - yOffset);
+                    Tiles.drawTile(context, cell, x- map.getXOffset(), y - map.getYOffset());
                 }
             }
         }
@@ -133,12 +120,19 @@ public class Main extends Application {
         }
     }
 
-    private int getYStart(int yOffset) {
-        return Math.max(yOffset - 20, 0);
+    private int getYStart() {
+        return Math.max(map.getYOffset() - 20, 0);
     }
 
-    private int getYEnd(int yOffset) {
-        return Math.min(yOffset + 20, map.getHeight());
+    private int getYEnd() {
+        return Math.min(map.getYOffset()+ 20, map.getHeight());
+    }
+    private int getXStart() {
+        return Math.max(map.getXOffset() - 25, 0);
+    }
+
+    private int getXEnd() {
+        return Math.min(map.getXOffset() + 25, map.getWidth());
     }
 
 
