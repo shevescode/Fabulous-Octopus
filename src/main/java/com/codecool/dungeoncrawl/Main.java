@@ -84,7 +84,7 @@ public class Main extends Application {
 
     private void incrementYOffset() {
         if (yOffset + 20 < map.getHeight()) {
-            if (player.getY() > 15) {
+            if (player.getY() > 13 + yOffset) {
                 yOffset += 1;
             }
         }
@@ -92,7 +92,7 @@ public class Main extends Application {
 
     private void decrementYOffset() {
         if (yOffset - 1 >= 0) {
-            if (player.getY() - yOffset <= 5) {
+            if (player.getY() - yOffset < 6) {
                 yOffset -= 1;
             }
         }
