@@ -61,29 +61,33 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
-            case UP -> {
+            case UP:
+            case W:
                 map.getPlayer().move(0, -1);
                 map.decrementYOffset();
                 refresh();
-            }
-            case DOWN -> {
+                break;
+            case S:
+            case DOWN:
                 map.getPlayer().move(0, 1);
                 map.incrementYOffset();
                 refresh();
-            }
-            case LEFT -> {
+                break;
+            case A:
+            case LEFT:
                 map.getPlayer().move(-1, 0);
                 map.decrementXOffset();
                 refresh();
-            }
-            case RIGHT -> {
+                break;
+            case D:
+            case RIGHT:
                 map.getPlayer().move(1, 0);
                 map.incrementXOffset();
                 refresh();
-            }
+                break;
+
         }
     }
-
 
     private void refresh() {
         monstersMove();
@@ -162,6 +166,8 @@ public class Main extends Application {
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
+
+
             }
             default -> {
 
