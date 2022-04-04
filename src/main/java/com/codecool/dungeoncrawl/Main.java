@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
-    private List<GameMap> gameMapsSaves;
+    private List<GameMap> savedMaps;
     private GameMap map;
     private GameMap mapLevelZeroSave;
     private GameMap mapLevelOneSave;
@@ -50,9 +50,9 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
-        gameMapsSaves = new ArrayList<>();
-        gameMapsSaves.add(mapLevelZeroSave);
-        gameMapsSaves.add(mapLevelOneSave);
+        savedMaps = new ArrayList<>();
+        savedMaps.add(mapLevelZeroSave);
+        savedMaps.add(mapLevelOneSave);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -137,9 +137,6 @@ public class Main extends Application {
     }
 
 
-    private GameMap map1 = null;
-    private GameMap map2 = null;
-
     private void changeMap(int i) {
         gameLevel += i;
         System.out.println(gameLevel);
@@ -155,8 +152,8 @@ public class Main extends Application {
             }
             case 1 -> {
                 mapLevelZeroSave = map;
-                mapLevelZeroSave .getPlayer().getCell().setActor(null);
-                mapLevelZeroSave .setPlayer(null);
+                mapLevelZeroSave.getPlayer().getCell().setActor(null);
+                mapLevelZeroSave.setPlayer(null);
 
                 if (mapLevelOneSave == null) {
                     mapLevelOneSave = MapLoader.loadMap("/level2.txt");
@@ -165,11 +162,6 @@ public class Main extends Application {
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
-
-
-            }
-            default -> {
-
             }
         }
 

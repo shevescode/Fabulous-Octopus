@@ -64,38 +64,20 @@ public class Player extends Actor {
     }
 
     private void openDoor(Cell cell) {
-        removeKey(CellType.CLOSED_DOOR);
+        removeKey(DoorKey.class);
         cell.setType(CellType.OPEN_DOOR);
     }
 
     private void openChest(Cell cell) {
-        removeKey(CellType.CLOSED_CHEST);
+        removeKey(ChestKey.class);
         cell.setType(CellType.OPEN_CHEST);
     }
 
-    private void removeKey(CellType cellType) {
-        switch (cellType) {
-            case CLOSED_DOOR -> {
-                Item key = inventory.stream()
-                        .filter(Item -> Item instanceof DoorKey)
-                        .findAny()
-                        .get();
-                inventory.remove(key);
-            }
-            case CLOSED_CHEST -> {
-                Item key = inventory.stream()
-                        .filter(Item -> Item instanceof ChestKey)
-                        .findAny()
-                        .get();
-                inventory.remove(key);
-            }
-        }
-
+    private void removeKey(Class<?> keyType) {
+        Item key = inventory.stream()
+                .filter(keyType::isInstance)
+                .findAny()
+                .orElse(null);
+        inventory.remove(key);
     }
-
-
-//    private void obtainObject() {
-// random integer and switch statement for chosing item -> health potion, sword, hammer, łuk XDDD
-//    }
-
 }

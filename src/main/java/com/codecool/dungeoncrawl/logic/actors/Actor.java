@@ -31,10 +31,6 @@ public abstract class Actor implements Drawable {
         return cell.getY();
     }
 
-    public void subtractHealthPoints(int i) {
-        health -= i;
-    }
-
     public int getAttack() {
         return attack;
     }
@@ -90,6 +86,12 @@ public abstract class Actor implements Drawable {
 
     private boolean canSurviveAttack(int attack) {
         return health > attack;
+    }
+
+    private void subtractHealthPoints(int i) {
+        if(i> 0) {
+            health -= i;
+        }
     }
 
 }
