@@ -5,46 +5,37 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Player extends Actor {
     private List<Item> inventory;
-    private int attack = 5;
 
     public Player(Cell cell) {
         super(cell);
-        setHealth(20);
+        setHealth(30);
+        setAttack(5);
     }
 
-    public void move(int dx, int dy) {
+    public void playerMakeMove(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
-        if (nextCell != null) {
-            if ((nextCell.getType() == CellType.FLOOR && nextCell.getActor() == null) || nextCell.getType() == CellType.OPEN_DOOR || nextCell.getType() == CellType.STAIRS_DOWN || nextCell.getType() == CellType.STAIRS_UP) {
-                moveToNextCell(nextCell);
-            } else if (nextCell.getActor() instanceof Monster) {
-                attackMonster(nextCell.getActor());
-
-                if (nextCell.getActor().getHealth() <= 0) {
-                    nextCell.removeDeadMonster();
-                    moveToNextCell(nextCell);
+        if (getCell().isNextCellOnMap(nextCell)) {
+            switch (nextCell.getType()) {
+                case CLOSED_DOOR -> {
+                    if (hasDoorKey()) {
+                        openDoor(nextCell);
+                    }
                 }
-
-            } else if (nextCell.getType() == CellType.CLOSED_DOOR) {
-                if (hasKey()) {
-                    nextCell.setType(CellType.OPEN_DOOR);
-                    openStaticObject();
-                    moveToNextCell(nextCell);
-                } else {
-//                    System.out.println("Find a proper key!");
-//                    add alert for player
-
+                case CLOSED_CHEST -> {
+                    if (hasChestKey()) {
+                        openChest(nextCell);
+                    }
                 }
-
-            } else if (nextCell.getType() == CellType.CLOSED_CHEST && hasKey()) {
-                openStaticObject();
-                nextCell.setType(CellType.OPEN_CHEST);
-
-//                obtainObject();
+                case OPEN_DOOR, OPEN_CHEST, FLOOR, STAIRS_DOWN, STAIRS_UP -> {
+                    if (nextCell.isCellOccupiedByActor()) {
+                        this.combat(nextCell.getActor());
+                    } else {
+                        moveToNextCell(nextCell);
+                    }
+                }
             }
         }
     }
@@ -55,42 +46,53 @@ public class Player extends Actor {
 
     public void pickUpItem(Item item) {
         if (item instanceof Sword) {
-            attack += ((Sword) item).getDamage();
+            setAttack(getAttack() + ((Sword) item).getDamage());
         }
         inventory.add(item);
-    }
-
-    public List<Item> getInventory() {
-        return inventory;
     }
 
     public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
     }
 
-    @Override
-    public int getAttack() {
-        return attack;
+    private boolean hasDoorKey() {
+        return inventory.stream().anyMatch(Item -> (Item instanceof DoorKey));
     }
 
-    private void attackMonster(Actor actor) {
-        actor.subtractHealthPoints(attack);
-        this.subtractHealthPoints(actor.getAttack());
+    private boolean hasChestKey() {
+        return inventory.stream().anyMatch(Item -> (Item instanceof ChestKey));
     }
 
-    private boolean hasKey() {
-        return inventory.stream().anyMatch(Item -> (Item instanceof DoorKey || Item instanceof ChestKey));
+    private void openDoor(Cell cell) {
+        removeKey(CellType.CLOSED_DOOR);
+        cell.setType(CellType.OPEN_DOOR);
     }
 
-    private void openStaticObject() {
-//        cell.setType(CellType.OPEN_DOOR);
-        Item key = inventory.stream()
-                .filter(Item -> (Item instanceof DoorKey || Item instanceof ChestKey))
-                .findAny().get();
-
-        System.out.println(key);
-        inventory.remove(key);
+    private void openChest(Cell cell) {
+        removeKey(CellType.CLOSED_CHEST);
+        cell.setType(CellType.OPEN_CHEST);
     }
+
+    private void removeKey(CellType cellType) {
+        switch (cellType) {
+            case CLOSED_DOOR -> {
+                Item key = inventory.stream()
+                        .filter(Item -> Item instanceof DoorKey)
+                        .findAny()
+                        .get();
+                inventory.remove(key);
+            }
+            case CLOSED_CHEST -> {
+                Item key = inventory.stream()
+                        .filter(Item -> Item instanceof ChestKey)
+                        .findAny()
+                        .get();
+                inventory.remove(key);
+            }
+        }
+
+    }
+
 
 //    private void obtainObject() {
 // random integer and switch statement for chosing item -> health potion, sword, hammer, łuk XDDD

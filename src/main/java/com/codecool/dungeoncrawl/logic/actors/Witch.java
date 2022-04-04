@@ -1,28 +1,17 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class Witch extends Actor implements Monster {
-    private int attack = 9;
     private int mana = 0;
 
     public Witch(Cell cell) {
         super(cell);
         setHealth(1);
-    }
-
-    @Override
-    public int getAttack() {
-        return attack;
-    }
-
-    @Override
-    public String getTileName() {
-        return "witch";
+        setAttack(20);
     }
 
     @Override
@@ -30,15 +19,28 @@ public class Witch extends Actor implements Monster {
         mana += 1;
         if (mana == 10) {
             GameMap map = this.getCell().getGameMap();
-            int randomX = ThreadLocalRandom.current().nextInt(0, map.getWidth() - 1 + 1);
-            int randomY = ThreadLocalRandom.current().nextInt(0, map.getHeight() - 1 + 1);
+            int randomY = new Random().nextInt(0, map.getHeight());
+            int randomX = new Random().nextInt(0, map.getWidth());
             Cell nextCell = map.getCell(randomX, randomY);
-            if (nextCell != null) {
-                if (nextCell.getType() != CellType.WALL && nextCell.getActor() == null) {
-                    moveToNextCell(nextCell);
+            if (getCell().isNextCellOnMap(nextCell)) {
+                switch (nextCell.getType()) {
+                    case FLOOR, EMPTY -> {
+                        if (nextCell.isCellOccupiedByActor()) {
+                            if(nextCell.getActor() instanceof Player) {
+                                this.combat(nextCell.getActor());
+                            }
+                        } else {
+                            moveToNextCell(nextCell);
+                        }
+                    }
                 }
             }
             mana = 0;
         }
+    }
+
+    @Override
+    public String getTileName() {
+        return "witch";
     }
 }

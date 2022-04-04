@@ -16,8 +16,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import static com.sun.javafx.application.PlatformImpl.exit;
-
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
     int gameLevel = 0;
@@ -36,7 +34,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         map.setPlayer(player);
 
@@ -61,31 +59,26 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
-            case UP:
-            case W:
-                map.getPlayer().move(0, -1);
+            case UP, W -> {
+                map.getPlayer().playerMakeMove(0, -1);
                 map.decrementYOffset();
                 refresh();
-                break;
-            case S:
-            case DOWN:
-                map.getPlayer().move(0, 1);
+            }
+            case S, DOWN -> {
+                map.getPlayer().playerMakeMove(0, 1);
                 map.incrementYOffset();
                 refresh();
-                break;
-            case A:
-            case LEFT:
-                map.getPlayer().move(-1, 0);
+            }
+            case A, LEFT -> {
+                map.getPlayer().playerMakeMove(-1, 0);
                 map.decrementXOffset();
                 refresh();
-                break;
-            case D:
-            case RIGHT:
-                map.getPlayer().move(1, 0);
+            }
+            case D, RIGHT -> {
+                map.getPlayer().playerMakeMove(1, 0);
                 map.incrementXOffset();
                 refresh();
-                break;
-
+            }
         }
     }
 
