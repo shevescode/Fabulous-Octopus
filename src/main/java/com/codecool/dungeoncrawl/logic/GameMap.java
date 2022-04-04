@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameMap {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private int XOffset = 0;
     private int YOffset = 0;
     private Cell[][] cells;
@@ -57,12 +57,12 @@ public class GameMap {
         return height;
     }
 
-    public List<Actor> getAllMonsters() {
-        List<Actor> monsterList = new ArrayList<>();
+    public List<Monster> getAllMonsters() {
+        List<Monster> monsterList = new ArrayList<>();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if(cells[x][y].getActor() instanceof Monster) {
-                    monsterList.add(cells[x][y].getActor());
+                    monsterList.add((Monster) cells[x][y].getActor());
                 }
             }
         }

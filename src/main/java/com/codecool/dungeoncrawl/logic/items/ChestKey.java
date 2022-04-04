@@ -14,6 +14,6 @@ public class ChestKey extends Item {
 
     @Override
     public String toString() {
-        return "Chest key ";
+        return "Chest key";
     }
 }

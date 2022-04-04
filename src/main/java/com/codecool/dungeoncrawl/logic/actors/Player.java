@@ -30,7 +30,7 @@ public class Player extends Actor {
                     }
                 }
                 case OPEN_DOOR, OPEN_CHEST, FLOOR, STAIRS_DOWN, STAIRS_UP -> {
-                    if (nextCell.isCellOccupiedByActor()) {
+                    if (nextCell.isActorOnCell()) {
                         this.combat(nextCell.getActor());
                     } else {
                         moveToNextCell(nextCell);

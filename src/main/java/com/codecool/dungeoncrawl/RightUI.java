@@ -27,14 +27,11 @@ public class RightUI extends GridPane {
 
         setPrefWidth(200);
         setPadding(new Insets(10));
-        // first row
         add(new Label("Health: "), 0, 0);
         add(healthLabel, 1, 0);
         add(new Label("Attack"), 0, 1);
         add(attackLabel, 1, 1);
         add(button, 2, 0);
-        // second row
-//        ui.add(new Label("Inventory: "), 0, 2);
         this.inventory = new UIInventory();
         add(inventory, 0, 2, 2, 1);
         button.setFocusTraversable(false);

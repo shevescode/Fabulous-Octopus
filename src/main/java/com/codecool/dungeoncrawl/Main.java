@@ -4,7 +4,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
@@ -16,18 +15,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class Main extends Application {
-    GameMap map = MapLoader.loadMap("/map.txt");
-    int gameLevel = 0;
-    Player player = new Player(map.getFirstPlayerCell());
+import java.util.ArrayList;
+import java.util.List;
 
-    Canvas canvas = new Canvas(
-            25 * Tiles.TILE_WIDTH,
-            20 * Tiles.TILE_WIDTH);
-    GraphicsContext context = canvas.getGraphicsContext2D();
+public class Main extends Application {
+    private List<GameMap> gameMapsSaves;
+    private GameMap map;
+    private GameMap mapLevelZeroSave;
+    private GameMap mapLevelOneSave;
+    private Player player;
+    private int gameLevel = 0;
 
     private RightUI rightUI;
 
+    private Canvas canvas;
+    private GraphicsContext context;
 
     public static void main(String[] args) {
         launch(args);
@@ -35,23 +37,27 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        canvas = new Canvas(
+                25 * Tiles.TILE_WIDTH,
+                20 * Tiles.TILE_WIDTH);
+        context = canvas.getGraphicsContext2D();
 
+        map = MapLoader.loadMap("/map.txt");
+        player = new Player(map.getFirstPlayerCell());
         map.setPlayer(player);
-
-        this.rightUI = new RightUI(map.getPlayer());
-
+        rightUI = new RightUI(map.getPlayer());
         map.getPlayer().setInventory(rightUI.getInventory().getItems());
-
         BorderPane borderPane = new BorderPane();
-
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
+        gameMapsSaves = new ArrayList<>();
+        gameMapsSaves.add(mapLevelZeroSave);
+        gameMapsSaves.add(mapLevelOneSave);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-
 
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
@@ -91,13 +97,13 @@ public class Main extends Application {
         for (int x = getXStart(); x < getXEnd(); x++) {
             for (int y = getYStart(); y < getYEnd(); y++) {
                 Cell cell = map.getCell(x, y);
-                if (cell.getActor() != null) {
-                    if (cell.getActor().getTileName().equals("player") && cell.getItem() != null) {
+                if (cell.isActorOnCell()) {
+                    if (cell.getActor() instanceof Player && cell.isItemOnCell()) {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
-                } else if (cell.getItem() != null) {
+                } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
@@ -107,9 +113,9 @@ public class Main extends Application {
 
         rightUI.setHealthLabel();
         rightUI.setAttackLabel();
-        if (playerGoDownstairs()) {
+        if (isPlayerGoingDownstairs()) {
             changeMap(1);
-        } else if (playerGoUpstairs()) {
+        } else if (isPlayerGoingUpstairs()) {
             changeMap(-1);
         }
     }
@@ -139,23 +145,23 @@ public class Main extends Application {
         System.out.println(gameLevel);
         switch (gameLevel) {
             case 0 -> {
-                map2 = map;
-                map2.getPlayer().getCell().setActor(null);
-                map2.setPlayer(null);
-                map = map1;
+                mapLevelOneSave = map;
+                mapLevelOneSave.getPlayer().getCell().setActor(null);
+                mapLevelOneSave.setPlayer(null);
+                map = mapLevelZeroSave;
                 player.setCell(map.getCell(20, 15));
                 map.getCell(20, 15).setActor(player);
                 map.setPlayer(player);
             }
             case 1 -> {
-                map1 = map;
-                map1.getPlayer().getCell().setActor(null);
-                map1.setPlayer(null);
+                mapLevelZeroSave = map;
+                mapLevelZeroSave .getPlayer().getCell().setActor(null);
+                mapLevelZeroSave .setPlayer(null);
 
-                if (map2 == null) {
-                    map2 = MapLoader.loadMap("/level2.txt");
+                if (mapLevelOneSave == null) {
+                    mapLevelOneSave = MapLoader.loadMap("/level2.txt");
                 }
-                map = map2;
+                map = mapLevelOneSave;
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
@@ -170,20 +176,18 @@ public class Main extends Application {
         refresh();
     }
 
-    private boolean playerGoDownstairs() {
+    private boolean isPlayerGoingDownstairs() {
         return map.getPlayer().getCell().getType() == CellType.STAIRS_DOWN;
     }
 
-    private boolean playerGoUpstairs() {
+    private boolean isPlayerGoingUpstairs() {
         return map.getPlayer().getCell().getType() == CellType.STAIRS_UP;
     }
 
 
     private void monstersMove() {
-        for (Actor monster : map.getAllMonsters()) {
-            ((Monster) monster).monsterMakeMove();
+        for (Monster monster : map.getAllMonsters()) {
+            monster.monsterMakeMove();
         }
     }
-
-
 }

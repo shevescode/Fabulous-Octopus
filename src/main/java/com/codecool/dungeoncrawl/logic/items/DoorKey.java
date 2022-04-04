@@ -14,6 +14,6 @@ public class DoorKey extends Item {
 
     @Override
     public String toString() {
-        return "Door key ";
+        return "Door key";
     }
 }

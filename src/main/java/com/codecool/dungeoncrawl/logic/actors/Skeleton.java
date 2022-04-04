@@ -16,7 +16,7 @@ public class Skeleton extends Actor implements Monster {
         if (getCell().isNextCellOnMap(nextCell)) {
             switch (nextCell.getType()) {
                 case OPEN_DOOR, OPEN_CHEST, FLOOR -> {
-                    if (nextCell.isCellOccupiedByActor()) {
+                    if (nextCell.isActorOnCell()) {
                         if(nextCell.getActor() instanceof Player) {
                             this.combat(nextCell.getActor());
                         }

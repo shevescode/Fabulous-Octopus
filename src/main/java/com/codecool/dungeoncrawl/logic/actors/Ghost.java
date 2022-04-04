@@ -14,7 +14,7 @@ public class Ghost extends Actor implements Monster {
     public void monsterMakeMove() {
         Cell nextCell = this.getNextCellForMonsterMove();
         if (getCell().isNextCellOnMap(nextCell)) {
-            if (nextCell.isCellOccupiedByActor()) {
+            if (nextCell.isActorOnCell()) {
                 if(nextCell.getActor() instanceof Player) {
                     this.combat(nextCell.getActor());
                 }
