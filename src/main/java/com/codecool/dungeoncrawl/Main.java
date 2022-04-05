@@ -155,8 +155,8 @@ public class Main extends Application {
             }
             case 1 -> {
                 mapLevelZeroSave = map;
-                mapLevelZeroSave .getPlayer().getCell().setActor(null);
-                mapLevelZeroSave .setPlayer(null);
+                mapLevelZeroSave.getPlayer().getCell().setActor(null);
+                mapLevelZeroSave.setPlayer(null);
 
                 if (mapLevelOneSave == null) {
                     mapLevelOneSave = MapLoader.loadMap("/level2.txt");

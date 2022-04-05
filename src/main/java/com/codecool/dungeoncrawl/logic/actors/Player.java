@@ -94,8 +94,4 @@ public class Player extends Actor {
     }
 
 
-//    private void obtainObject() {
-// random integer and switch statement for chosing item -> health potion, sword, hammer, łuk XDDD
-//    }
-
 }
