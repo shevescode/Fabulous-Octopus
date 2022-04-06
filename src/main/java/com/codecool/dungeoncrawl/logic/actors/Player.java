@@ -73,7 +73,7 @@ public class Player extends Actor {
         cell.setType(CellType.OPEN_CHEST);
     }
 
-    private void removeKey(Class<?> keyType) {
+    public void removeKey(Class<?> keyType) {
         Item key = inventory.stream()
                 .filter(keyType::isInstance)
                 .findAny()

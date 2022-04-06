@@ -38,6 +38,7 @@ public class RightUI extends GridPane {
 
     }
 
+
     public UIInventory getInventory() {
         return inventory;
     }
