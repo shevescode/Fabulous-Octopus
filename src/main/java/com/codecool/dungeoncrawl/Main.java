@@ -105,7 +105,10 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
-                } else {
+                } else if(cell.isChestOnCell()) {
+                    Tiles.drawTile(context, cell.getChest(), x - map.getXOffset(), y - map.getYOffset());
+                }
+                else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }
             }
