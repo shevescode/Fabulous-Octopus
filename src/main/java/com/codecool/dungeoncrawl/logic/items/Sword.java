@@ -1,16 +1,18 @@
 package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 
 public class Sword extends Item {
     private final int damage = 2;
 
     public Sword(Cell cell) {
         super(cell);
+
     }
 
     public Sword() {
-        super();
+
     }
 
     public String getTileName() {

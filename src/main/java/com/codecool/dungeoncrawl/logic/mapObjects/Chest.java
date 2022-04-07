@@ -16,7 +16,6 @@ public class Chest implements Drawable {
     public Chest(Cell cell) {
         this.cell = cell;
         open = false;
-        item = drawItem();
     }
 
     public String getTileName() {
@@ -36,16 +35,14 @@ public class Chest implements Drawable {
         open = true;
     }
 
-    private Item drawItem() {
+    public Item drawItem() {
         int i = new Random().nextInt(0, 2);
         System.out.println(i);
         switch (i) {
             case 0 -> {
-                System.out.println(0);
                 return new HealthPotion();
             }
             case 1 -> {
-                System.out.println(1);
                 return new Sword();
             }
         }
