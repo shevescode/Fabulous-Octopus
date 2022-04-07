@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 
 import java.util.List;
 
@@ -24,12 +25,14 @@ public class Player extends Actor {
                         openDoor(nextCell);
                     }
                 }
-                case CLOSED_CHEST -> {
-                    if (hasChestKey()) {
+                case CHEST -> {
+                    if (nextCell.getChest().isOpen()) {
+                        moveToNextCell(nextCell);
+                    } else if (hasChestKey()) {
                         openChest(nextCell);
                     }
                 }
-                case OPEN_DOOR, OPEN_CHEST, FLOOR, STAIRS_DOWN, STAIRS_UP -> {
+                case OPEN_DOOR, FLOOR, STAIRS_DOWN, STAIRS_UP -> {
                     if (nextCell.isActorOnCell()) {
                         this.combat(nextCell.getActor());
                     } else {
@@ -70,7 +73,7 @@ public class Player extends Actor {
 
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
-        cell.setType(CellType.OPEN_CHEST);
+        cell.getChest().openChest();
     }
 
     public void removeKey(Class<?> keyType) {

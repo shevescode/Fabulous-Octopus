@@ -1,19 +1,39 @@
-package com.codecool.dungeoncrawl.logic.items;
+package com.codecool.dungeoncrawl.logic.mapObjects;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.items.HealthPotion;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Sword;
 
 import java.util.Random;
 
-public class Chest extends Item {
+public class Chest implements Drawable {
     private Item item;
+    private Cell cell;
+    private boolean open;
 
     public Chest(Cell cell) {
-        super(cell);
+        this.cell = cell;
+        open = false;
         item = drawItem();
     }
 
     public String getTileName() {
-        return "chest";
+        if(open) {
+            return "openChest";
+        } else {
+            return "closedChest";
+        }
+
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void openChest() {
+        open = true;
     }
 
     private Item drawItem() {
@@ -31,6 +51,7 @@ public class Chest extends Item {
         }
         return null;
     }
+
 
     @Override
     public String toString() {

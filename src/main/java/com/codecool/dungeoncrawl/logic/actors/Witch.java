@@ -24,7 +24,7 @@ public class Witch extends Actor implements Monster {
             Cell nextCell = map.getCell(randomX, randomY);
             if (getCell().isNextCellOnMap(nextCell)) {
                 switch (nextCell.getType()) {
-                    case FLOOR, EMPTY -> {
+                    case FLOOR, EMPTY, CHEST -> {
                         if (nextCell.isActorOnCell()) {
                             if(nextCell.getActor() instanceof Player) {
                                 this.combat(nextCell.getActor());

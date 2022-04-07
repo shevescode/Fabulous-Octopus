@@ -3,7 +3,7 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Witch;
-import com.codecool.dungeoncrawl.logic.items.Chest;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import com.codecool.dungeoncrawl.logic.items.ChestKey;
 import com.codecool.dungeoncrawl.logic.items.DoorKey;
 import com.codecool.dungeoncrawl.logic.items.Sword;
@@ -53,8 +53,8 @@ public class MapLoader {
                             new ChestKey(cell);
                         }
                         case 'c' -> {
-                            cell.setType(CellType.CLOSED_CHEST);
-
+                            cell.setType(CellType.CHEST);
+                            cell.setChest(new Chest(cell));
                         }
                         case 'g' -> {
                             cell.setType(CellType.EMPTY);
