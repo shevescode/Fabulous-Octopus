@@ -102,7 +102,11 @@ public class Main extends Application {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
-                    Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
+//                    if(playerStandOnChest()) {
+//                        Chest.showItem();
+//                        rightUI.showChestButton();
+//                    } todo
+                        Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else if(cell.isChestOnCell()) {
