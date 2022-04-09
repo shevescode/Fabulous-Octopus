@@ -54,7 +54,7 @@ public class MapLoader {
                         }
                         case 'c' -> {
                             cell.setType(CellType.CHEST);
-                            cell.setChest(new Chest(cell));
+                            cell.setMapObject(new Chest(cell));
                         }
                         case 'g' -> {
                             cell.setType(CellType.EMPTY);

@@ -3,9 +3,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 
 import java.util.List;
-
 
 public class Player extends Actor {
     private List<Item> inventory;
@@ -26,7 +26,7 @@ public class Player extends Actor {
                     }
                 }
                 case CHEST -> {
-                    if (nextCell.getChest().isOpen()) {
+                    if (((Chest) nextCell.getMapObject()).isOpen()) {
                         moveToNextCell(nextCell);
                     } else if (hasChestKey()) {
                         openChest(nextCell);
@@ -74,7 +74,7 @@ public class Player extends Actor {
 
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
-        cell.getChest().openChest();
+        ((Chest) cell.getMapObject()).openChest();
         Item chestItem= cell.getChest().drawItem(); //todo getter z Chest
 
         if (chestItem instanceof Sword) {
@@ -83,6 +83,7 @@ public class Player extends Actor {
         } else if (chestItem instanceof HealthPotion) {
             addHealthPoints(chestItem);
         } //todo przeniesc gdzies indziej
+
     }
 
     public void removeKey(Class<?> keyType) {

@@ -3,12 +3,13 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private Item item;
-    private Chest chest;
+    private MapObject mapObject;
     private final GameMap gameMap;
     private final int x;
     private final int y;
@@ -41,12 +42,12 @@ public class Cell implements Drawable {
         return item;
     }
 
-    public Chest getChest() {
-        return chest;
+    public MapObject getMapObject() {
+        return mapObject;
     }
 
-    public void setChest(Chest chest) {
-        this.chest = chest;
+    public void setMapObject(MapObject mapObject) {
+        this.mapObject = mapObject;
     }
 
     public void setItem(Item item) {
@@ -87,8 +88,8 @@ public class Cell implements Drawable {
     public boolean isItemOnCell() {
         return getItem() != null;
     }
-    public boolean isChestOnCell() {
-        return getChest() != null;
+    public boolean isMapObjectOnCell() {
+        return getMapObject() != null;
     }
 
     public boolean isNextCellOnMap(Cell cell) {

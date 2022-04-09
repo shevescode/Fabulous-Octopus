@@ -11,6 +11,7 @@ public class Ghost extends Actor implements Monster {
     }
 
 
+
     public void monsterMakeMove() {
         Cell nextCell = this.getNextCellForMonsterMove();
         if (getCell().isNextCellOnMap(nextCell)) {
