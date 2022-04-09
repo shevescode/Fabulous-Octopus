@@ -61,6 +61,21 @@ public class Main extends Application {
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
 
+//        Runnable r = () -> {
+//            for (int i = 0; i < 100_000; i++) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                monstersMove();
+//                refresh();
+//            }
+//        };
+//
+//        Thread thread = new Thread(r);
+//        thread.start();
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -69,6 +84,7 @@ public class Main extends Application {
                     map.getPlayer().playerMakeMove(0, -1);
                     map.decrementYOffset();
                     refresh();
+
                 }
                 case S, DOWN -> {
                     map.getPlayer().playerMakeMove(0, 1);
@@ -88,7 +104,7 @@ public class Main extends Application {
             }
     }
 
-    private void refresh() {
+    public void refresh() {
         monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
