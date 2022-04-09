@@ -75,13 +75,12 @@ public class Player extends Actor {
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
         ((Chest) cell.getMapObject()).openChest();
-        Item chestItem= cell.getChest().drawItem(); //todo getter z Chest
 
-        if (chestItem instanceof Sword) {
-            addAttackPoints(chestItem);
-            inventory.add(chestItem);
-        } else if (chestItem instanceof HealthPotion) {
-            addHealthPoints(chestItem);
+        if (((Chest) cell.getMapObject()).getItem() instanceof Sword) {
+            addAttackPoints(((Chest) cell.getMapObject()).getItem());
+            inventory.add(((Chest) cell.getMapObject()).getItem());
+        } else if (((Chest) cell.getMapObject()).getItem() instanceof HealthPotion) {
+            addHealthPoints(((Chest) cell.getMapObject()).getItem());
         } //todo przeniesc gdzies indziej
 
     }

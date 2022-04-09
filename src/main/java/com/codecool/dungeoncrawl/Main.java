@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -50,6 +51,7 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
+//        borderPane.setLeft(rightUI);
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
@@ -64,28 +66,28 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-            switch (keyEvent.getCode()) {
-                case UP, W -> {
-                    map.getPlayer().playerMakeMove(0, -1);
-                    map.decrementYOffset();
-                    refresh();
-                }
-                case S, DOWN -> {
-                    map.getPlayer().playerMakeMove(0, 1);
-                    map.incrementYOffset();
-                    refresh();
-                }
-                case A, LEFT -> {
-                    map.getPlayer().playerMakeMove(-1, 0);
-                    map.decrementXOffset();
-                    refresh();
-                }
-                case D, RIGHT -> {
-                    map.getPlayer().playerMakeMove(1, 0);
-                    map.incrementXOffset();
-                    refresh();
-                }
+        switch (keyEvent.getCode()) {
+            case UP, W -> {
+                map.getPlayer().playerMakeMove(0, -1);
+                map.decrementYOffset();
+                refresh();
             }
+            case S, DOWN -> {
+                map.getPlayer().playerMakeMove(0, 1);
+                map.incrementYOffset();
+                refresh();
+            }
+            case A, LEFT -> {
+                map.getPlayer().playerMakeMove(-1, 0);
+                map.decrementXOffset();
+                refresh();
+            }
+            case D, RIGHT -> {
+                map.getPlayer().playerMakeMove(1, 0);
+                map.incrementXOffset();
+                refresh();
+            }
+        }
     }
 
     private void refresh() {
@@ -101,18 +103,17 @@ public class Main extends Application {
                     if (cell.getActor() instanceof Player && cell.isItemOnCell()) {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
-                    }
-//                    if(playerStandOnChest()) {
+                    } else if (isPlayerStandingOnChest()&& cell.isMapObjectOnCell()) {
+                        rightUI.setLootedItemText(cell);
 //                        Chest.showItem();
 //                        rightUI.showChestButton();
-//                    } todo
-                        Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
+                    }
+                    Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
-                } else if(cell.isMapObjectOnCell()) {
+                } else if (cell.isMapObjectOnCell()) {
                     Tiles.drawTile(context, cell.getMapObject(), x - map.getXOffset(), y - map.getYOffset());
-                }
-                else {
+                } else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }
             }
@@ -182,6 +183,9 @@ public class Main extends Application {
         return map.getPlayer().getCell().getType() == CellType.STAIRS_UP;
     }
 
+    private boolean isPlayerStandingOnChest() {
+        return map.getPlayer().getCell().getType() == CellType.CHEST;
+    }
 
     private void monstersMove() {
         for (Monster monster : map.getAllMonsters()) {

@@ -85,6 +85,7 @@ public class Cell implements Drawable {
     public boolean isActorOnCell() {
         return getActor() != null;
     }
+
     public boolean isItemOnCell() {
         return getItem() != null;
     }
