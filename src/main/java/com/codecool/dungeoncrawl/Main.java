@@ -58,34 +58,34 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case UP, W -> {
-                map.getPlayer().playerMakeMove(0, -1);
-                map.decrementYOffset();
-                refresh();
+            switch (keyEvent.getCode()) {
+                case UP, W -> {
+                    map.getPlayer().playerMakeMove(0, -1);
+                    map.decrementYOffset();
+                    refresh();
+                }
+                case S, DOWN -> {
+                    map.getPlayer().playerMakeMove(0, 1);
+                    map.incrementYOffset();
+                    refresh();
+                }
+                case A, LEFT -> {
+                    map.getPlayer().playerMakeMove(-1, 0);
+                    map.decrementXOffset();
+                    refresh();
+                }
+                case D, RIGHT -> {
+                    map.getPlayer().playerMakeMove(1, 0);
+                    map.incrementXOffset();
+                    refresh();
+                }
             }
-            case S, DOWN -> {
-                map.getPlayer().playerMakeMove(0, 1);
-                map.incrementYOffset();
-                refresh();
-            }
-            case A, LEFT -> {
-                map.getPlayer().playerMakeMove(-1, 0);
-                map.decrementXOffset();
-                refresh();
-            }
-            case D, RIGHT -> {
-                map.getPlayer().playerMakeMove(1, 0);
-                map.incrementXOffset();
-                refresh();
-            }
-        }
     }
 
     private void refresh() {
@@ -105,8 +105,8 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
-                } else if(cell.isChestOnCell()) {
-                    Tiles.drawTile(context, cell.getChest(), x - map.getXOffset(), y - map.getYOffset());
+                } else if(cell.isMapObjectOnCell()) {
+                    Tiles.drawTile(context, cell.getMapObject(), x - map.getXOffset(), y - map.getYOffset());
                 }
                 else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
@@ -142,7 +142,6 @@ public class Main extends Application {
 
     private void changeMap(int i) {
         gameLevel += i;
-        System.out.println(gameLevel);
         switch (gameLevel) {
             case 0 -> {
                 mapLevelOneSave = map;

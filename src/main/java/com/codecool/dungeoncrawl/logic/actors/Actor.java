@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.mapObjects.DeadBody;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,7 +39,9 @@ public abstract class Actor implements Drawable {
     public void killActor() {
         health = 0;
         cell.setActor(null);
+        cell.setMapObject(new DeadBody(cell));
         cell = null;
+
     }
 
     public Cell getNextCellForMonsterMove() {

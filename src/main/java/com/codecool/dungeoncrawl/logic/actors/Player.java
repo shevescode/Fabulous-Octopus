@@ -26,7 +26,7 @@ public class Player extends Actor {
                     }
                 }
                 case CHEST -> {
-                    if (nextCell.getChest().isOpen()) {
+                    if (((Chest) nextCell.getMapObject()).isOpen()) {
                         moveToNextCell(nextCell);
                     } else if (hasChestKey()) {
                         openChest(nextCell);
@@ -73,7 +73,7 @@ public class Player extends Actor {
 
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
-        cell.getChest().openChest();
+        ((Chest) cell.getMapObject()).openChest();
     }
 
     public void removeKey(Class<?> keyType) {

@@ -4,32 +4,17 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
-public class Chest extends MapObject implements Lootable {
-    private boolean open;
+public class DeadBody extends MapObject implements Lootable {
     private final Item item;
 
-    public Chest(Cell cell) {
+    public DeadBody(Cell cell) {
         super(cell);
-        open = false;
         item = drawItem();
-
     }
 
+    @Override
     public String getTileName() {
-        if(open) {
-            return "openChest";
-        } else {
-            return "closedChest";
-        }
-
-    }
-
-    public boolean isOpen() {
-        return open;
-    }
-
-    public void openChest() {
-        open = true;
+        return "deadBody";
     }
 
     public Item getItem() {
