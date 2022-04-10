@@ -49,7 +49,6 @@ public class Player extends Actor {
 
     public void pickUpItem(Item item) {
         if (item instanceof Sword) {
-//            setAttack(getAttack() + ((Sword) sitem).getDamage());
             addAttackPoints(item);
         }
         inventory.add(item);

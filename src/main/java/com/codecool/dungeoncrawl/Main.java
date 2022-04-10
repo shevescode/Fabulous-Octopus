@@ -95,6 +95,7 @@ public class Main extends Application {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
+        rightUI.clearFlowPane();
 
         for (int x = getXStart(); x < getXEnd(); x++) {
             for (int y = getYStart(); y < getYEnd(); y++) {
@@ -103,8 +104,8 @@ public class Main extends Application {
                     if (cell.getActor() instanceof Player && cell.isItemOnCell()) {
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
-                    } else if (isPlayerStandingOnChest()&& cell.isMapObjectOnCell()) {
-                        rightUI.setLootedItemText(cell);
+                    } else if (isPlayerStandingOnChest() && cell.isMapObjectOnCell()) {
+                        rightUI.checkChestLoot(cell);
 //                        Chest.showItem();
 //                        rightUI.showChestButton();
                     }
