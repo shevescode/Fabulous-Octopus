@@ -45,7 +45,7 @@ public class Main extends Application {
                 20 * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
 
-        map = MapLoader.loadMap("/test.txt");
+        map = MapLoader.loadMap("/map.txt");
         player = new Player(map.getFirstPlayerCell());
         map.setPlayer(player);
         rightUI = new RightUI(map.getPlayer());
@@ -74,9 +74,9 @@ public class Main extends Application {
 //                refresh();
 //            }
 //        };
-        monsterMove = new MoveMonsters(map, this);
-        Thread thread = new Thread(monsterMove);
-        thread.start();
+//        monsterMove = new MoveMonsters(map, this);
+//        Thread thread = new Thread(monsterMove);
+//        thread.start();
 
     }
 
@@ -107,6 +107,8 @@ public class Main extends Application {
     }
 
     public void refresh() {
+        monstersMove();
+
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
@@ -197,9 +199,9 @@ public class Main extends Application {
     }
 
 
-//    private void monstersMove() {
-//        for (Monster monster : map.getAllMonsters()) {
-//            monster.monsterMakeMove();
-//        }
-//    }
+    private void monstersMove() {
+        for (Monster monster : map.getAllMonsters()) {
+            monster.monsterMakeMove();
+        }
+    }
 }
