@@ -24,6 +24,6 @@ public class Sword extends Item {
 
     @Override
     public String toString() {
-        return "Sword - " + damage + " attack";
+        return "Sword - " + damage + " attack points";
     }
 }

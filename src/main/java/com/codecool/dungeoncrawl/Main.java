@@ -51,7 +51,7 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
-//        borderPane.setLeft(rightUI);
+
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
@@ -95,7 +95,7 @@ public class Main extends Application {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
-        rightUI.clearFlowPane();
+        rightUI.clearChestLootGrid();
 
         for (int x = getXStart(); x < getXEnd(); x++) {
             for (int y = getYStart(); y < getYEnd(); y++) {
@@ -106,8 +106,8 @@ public class Main extends Application {
                         rightUI.buttonOnClick(cell);
                     } else if (isPlayerStandingOnChest() && cell.isMapObjectOnCell()) {
                         rightUI.checkChestLoot(cell);
-//                        Chest.showItem();
-//                        rightUI.showChestButton();
+                        rightUI.showPickButton();
+                        rightUI.buttonOnClick(cell);
                     }
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {

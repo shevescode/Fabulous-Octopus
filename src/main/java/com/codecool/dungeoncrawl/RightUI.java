@@ -9,40 +9,39 @@ import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 
 public class RightUI extends GridPane {
-    private Text lootedItemText;
     private final UIInventory inventory;
     private final Label healthLabel;
     private final Label attackLabel;
-    private final Label inventoryLabel;
+
     private final Button pickUpButton;
     private final Player player;
     private Stage stage;
+
     private Canvas canvas;
     private GraphicsContext context;
+    private GridPane chestLootGrid;
 
-    private FlowPane flowPane;
 
     public RightUI(Player player) {
         super();
-        this.setGridLinesVisible(true);
+//        this.setGridLinesVisible(true);
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
-        this.inventoryLabel = new Label();
         this.pickUpButton = new Button("Pick up item");
-        this.lootedItemText = new Text();
+
         this.stage = new Stage();
+
         this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
         this.context = canvas.getGraphicsContext2D();
+        this.chestLootGrid = new GridPane();
 
 
         setPrefWidth(200);
@@ -53,11 +52,9 @@ public class RightUI extends GridPane {
         add(attackLabel, 1, 1);
         add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();
-        add(inventory, 0, 5, 2, 1);
+        add(inventory, 0, 2, 3, 1);
         pickUpButton.setFocusTraversable(false);
-
-        this.flowPane = new FlowPane();
-        add(flowPane, 0, 8, 2, 10);
+        addChestLootLabel();
 
     }
 
@@ -76,6 +73,11 @@ public class RightUI extends GridPane {
 
     }
 
+    public void addChestLootLabel() {
+        add(new Label("Chest loot: "), 0, 12);
+        add(chestLootGrid, 0, 13, 2, 1);
+    }
+
     public void showPickButton() {
         pickUpButton.setVisible(true);
 
@@ -89,30 +91,35 @@ public class RightUI extends GridPane {
         pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                player.pickUpItem(cell.getItem());
-                cell.setItem(null);
-                hideButton();
+                if (cell.isItemOnCell()) {
+                    player.pickUpItem(cell.getItem());
+                    cell.setItem(null);
+//                    setAttackLabel();
+                } else {
+                    player.pickUpItem(((Chest) cell.getMapObject()).getItem());
+                    ((Chest) cell.getMapObject()).removeItem();
+
+                }
                 setAttackLabel();
+                setHealthLabel();
+                hideButton();
             }
         });
     }
 
     public void checkChestLoot(Cell cell) {
-        GridPane grid = new GridPane();
-
-        context.setFill(Color.BLACK);
-        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        Tiles.drawTile(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
-//        lootedItemText.setText("You have found " + ((Chest) cell.getMapObject()).getItem());
-        grid.add(canvas, 0, 0);
-
-        flowPane.getChildren().add(grid);
-        showPickButton();
+        if (((Chest) cell.getMapObject()).isNotEmpty()) {
+//            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
+            Tiles.drawTile(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
+            chestLootGrid.add(canvas, 0, 0);
+        } else {
+            System.out.println("empty"); /*TODO:dorobić coś co bedzie obsługiwało wyjątek pustej skrzynki*/
+        }
 
     }
 
-    public void clearFlowPane() {
-        flowPane.getChildren().clear();
+    public void clearChestLootGrid() {
+        chestLootGrid.getChildren().clear();
     }
+
 }
