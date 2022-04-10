@@ -7,11 +7,13 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -23,6 +25,7 @@ public class Main extends Application {
     private GameMap map;
     private GameMap mapLevelZeroSave;
     private GameMap mapLevelOneSave;
+    private MoveMonsters monsterMove;
     private Player player;
     private int gameLevel = 0;
 
@@ -42,7 +45,7 @@ public class Main extends Application {
                 20 * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
 
-        map = MapLoader.loadMap("/map.txt");
+        map = MapLoader.loadMap("/test.txt");
         player = new Player(map.getFirstPlayerCell());
         map.setPlayer(player);
         rightUI = new RightUI(map.getPlayer());
@@ -53,7 +56,6 @@ public class Main extends Application {
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
-
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
@@ -72,40 +74,39 @@ public class Main extends Application {
 //                refresh();
 //            }
 //        };
-//
-//        Thread thread = new Thread(r);
-//        thread.start();
+        monsterMove = new MoveMonsters(map, this);
+        Thread thread = new Thread(monsterMove);
+        thread.start();
 
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
-            switch (keyEvent.getCode()) {
-                case UP, W -> {
-                    map.getPlayer().playerMakeMove(0, -1);
-                    map.decrementYOffset();
-                    refresh();
+        switch (keyEvent.getCode()) {
+            case UP, W -> {
+                map.getPlayer().playerMakeMove(0, -1);
+                map.decrementYOffset();
+                refresh();
 
-                }
-                case S, DOWN -> {
-                    map.getPlayer().playerMakeMove(0, 1);
-                    map.incrementYOffset();
-                    refresh();
-                }
-                case A, LEFT -> {
-                    map.getPlayer().playerMakeMove(-1, 0);
-                    map.decrementXOffset();
-                    refresh();
-                }
-                case D, RIGHT -> {
-                    map.getPlayer().playerMakeMove(1, 0);
-                    map.incrementXOffset();
-                    refresh();
-                }
             }
+            case S, DOWN -> {
+                map.getPlayer().playerMakeMove(0, 1);
+                map.incrementYOffset();
+                refresh();
+            }
+            case A, LEFT -> {
+                map.getPlayer().playerMakeMove(-1, 0);
+                map.decrementXOffset();
+                refresh();
+            }
+            case D, RIGHT -> {
+                map.getPlayer().playerMakeMove(1, 0);
+                map.incrementXOffset();
+                refresh();
+            }
+        }
     }
 
     public void refresh() {
-        monstersMove();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
@@ -121,10 +122,9 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
-                } else if(cell.isMapObjectOnCell()) {
+                } else if (cell.isMapObjectOnCell()) {
                     Tiles.drawTile(context, cell.getMapObject(), x - map.getXOffset(), y - map.getYOffset());
-                }
-                else {
+                } else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }
             }
@@ -164,6 +164,7 @@ public class Main extends Application {
                 mapLevelOneSave.getPlayer().getCell().setActor(null);
                 mapLevelOneSave.setPlayer(null);
                 map = mapLevelZeroSave;
+                monsterMove.setMap(map);
                 player.setCell(map.getCell(20, 15));
                 map.getCell(20, 15).setActor(player);
                 map.setPlayer(player);
@@ -177,6 +178,7 @@ public class Main extends Application {
                     mapLevelOneSave = MapLoader.loadMap("/level2.txt");
                 }
                 map = mapLevelOneSave;
+                monsterMove.setMap(map);
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);
@@ -195,9 +197,9 @@ public class Main extends Application {
     }
 
 
-    private void monstersMove() {
-        for (Monster monster : map.getAllMonsters()) {
-            monster.monsterMakeMove();
-        }
-    }
+//    private void monstersMove() {
+//        for (Monster monster : map.getAllMonsters()) {
+//            monster.monsterMakeMove();
+//        }
+//    }
 }
