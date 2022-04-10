@@ -7,31 +7,30 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class RightUI extends GridPane {
     private UIInventory inventory;
     private Label healthLabel;
     private Label attackLabel;
-    private Label inventoryLabel;
+
+
     private Button button;
     private Player player;
+    private Integer asd = 2;
 
     public RightUI(Player player) {
         super();
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
-        this.inventoryLabel = new Label();
         this.button = new Button("Pick up item");
 
         setPrefWidth(200);
         setPadding(new Insets(10));
         add(new Label("Health: "), 0, 0);
         add(healthLabel, 1, 0);
-        add(new Label("Attack"), 0, 1);
+        add(new Label("Attack: "), 0, 1);
         add(attackLabel, 1, 1);
         add(button, 2, 0);
         this.inventory = new UIInventory();

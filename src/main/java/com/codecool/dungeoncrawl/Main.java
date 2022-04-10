@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Spider;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -59,9 +60,12 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
+
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
+        scene.setOnKeyPressed(this::onKeyPressed);
+
+
 
 //        Runnable r = () -> {
 //            for (int i = 0; i < 100_000; i++) {
@@ -81,12 +85,13 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        rightUI.setHealthLabel();
+        rightUI.setAttackLabel();
         switch (keyEvent.getCode()) {
             case UP, W -> {
                 map.getPlayer().playerMakeMove(0, -1);
                 map.decrementYOffset();
                 refresh();
-
             }
             case S, DOWN -> {
                 map.getPlayer().playerMakeMove(0, 1);
@@ -132,8 +137,7 @@ public class Main extends Application {
             }
         }
 
-        rightUI.setHealthLabel();
-        rightUI.setAttackLabel();
+//
         if (isPlayerGoingDownstairs()) {
             changeMap(1);
         } else if (isPlayerGoingUpstairs()) {
