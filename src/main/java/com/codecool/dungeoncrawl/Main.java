@@ -6,13 +6,17 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Spider;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -24,6 +28,7 @@ public class Main extends Application {
     private GameMap map;
     private GameMap mapLevelZeroSave;
     private GameMap mapLevelOneSave;
+    private MoveMonsters monsterMove;
     private Player player;
     private int gameLevel = 0;
 
@@ -55,17 +60,38 @@ public class Main extends Application {
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
-
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
+
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
+        scene.setOnKeyPressed(this::onKeyPressed);
+
+
+
+//        Runnable r = () -> {
+//            for (int i = 0; i < 100_000; i++) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                monstersMove();
+//                refresh();
+//            }
+//        };
+        monsterMove = new MoveMonsters(map, this);
+        Thread thread = new Thread(monsterMove);
+        thread.start();
 
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+
+        rightUI.setHealthLabel();
+        rightUI.setAttackLabel();
+
         switch (keyEvent.getCode()) {
             case UP, W -> {
                 map.getPlayer().playerMakeMove(0, -1);
@@ -81,6 +107,7 @@ public class Main extends Application {
                 map.getPlayer().playerMakeMove(-1, 0);
                 map.decrementXOffset();
                 refresh();
+
             }
             case D, RIGHT -> {
                 map.getPlayer().playerMakeMove(1, 0);
@@ -90,8 +117,9 @@ public class Main extends Application {
         }
     }
 
-    private void refresh() {
-        monstersMove();
+    public void refresh() {
+//        monstersMove();
+
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
@@ -120,8 +148,7 @@ public class Main extends Application {
             }
         }
 
-        rightUI.setHealthLabel();
-        rightUI.setAttackLabel();
+//
         if (isPlayerGoingDownstairs()) {
             changeMap(1);
         } else if (isPlayerGoingUpstairs()) {
@@ -154,6 +181,7 @@ public class Main extends Application {
                 mapLevelOneSave.getPlayer().getCell().setActor(null);
                 mapLevelOneSave.setPlayer(null);
                 map = mapLevelZeroSave;
+                monsterMove.setMap(map);
                 player.setCell(map.getCell(20, 15));
                 map.getCell(20, 15).setActor(player);
                 map.setPlayer(player);
@@ -167,6 +195,7 @@ public class Main extends Application {
                     mapLevelOneSave = MapLoader.loadMap("/level2.txt");
                 }
                 map = mapLevelOneSave;
+                monsterMove.setMap(map);
                 player.setCell(map.getFirstPlayerCell());
                 map.getFirstPlayerCell().setActor(player);
                 map.setPlayer(player);

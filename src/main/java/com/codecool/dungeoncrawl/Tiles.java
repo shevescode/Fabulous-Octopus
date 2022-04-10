@@ -36,11 +36,14 @@ public class Tiles {
         tileMap.put("witch", new Tile(24,1));
         tileMap.put("door key", new Tile(17, 23));
         tileMap.put("chest key", new Tile(16, 23));
+
         tileMap.put("sword", new Tile(0, 29));
         tileMap.put("health potion", new Tile(17, 25));
         tileMap.put("closedChest", new Tile(8, 6));
         tileMap.put("openChest", new Tile(9, 6));
         tileMap.put("deadBody", new Tile(0, 15));
+       tileMap.put("spider", new Tile(30,5));
+
 
     }
 

@@ -16,17 +16,19 @@ import javafx.scene.layout.GridPane;
 
 
 public class RightUI extends GridPane {
-    private final UIInventory inventory;
-    private final Label healthLabel;
-    private final Label attackLabel;
 
-    private final Button pickUpButton;
-    private final Player player;
+    private UIInventory inventory;
+    private Label healthLabel;
+    private Label attackLabel;
+
+    private Button pickUpButton;
+    private Player player;
     private Stage stage;
 
     private Canvas canvas;
     private GraphicsContext context;
     private GridPane chestLootGrid;
+
 
 
     public RightUI(Player player) {
@@ -35,6 +37,7 @@ public class RightUI extends GridPane {
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
+
         this.pickUpButton = new Button("Pick up item");
 
         this.stage = new Stage();
@@ -43,12 +46,11 @@ public class RightUI extends GridPane {
         this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
 
-
         setPrefWidth(200);
         setPadding(new Insets(10));
         add(new Label("Health: "), 0, 0);
         add(healthLabel, 1, 0);
-        add(new Label("Attack"), 0, 1);
+        add(new Label("Attack: "), 0, 1);
         add(attackLabel, 1, 1);
         add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();

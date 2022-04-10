@@ -87,6 +87,14 @@ public abstract class Actor implements Drawable {
         }
     }
 
+//    public String getAttackToString() {
+//        return String.valueOf(attack);
+//    }
+//
+//    public String getHealthToString() {
+//        return String.valueOf(health);
+//    }
+
     private boolean canSurviveAttack(int attack) {
         return health > attack;
     }
@@ -96,5 +104,7 @@ public abstract class Actor implements Drawable {
             health -= i;
         }
     }
+
+
 
 }
