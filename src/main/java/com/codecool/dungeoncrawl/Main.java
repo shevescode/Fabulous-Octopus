@@ -74,9 +74,9 @@ public class Main extends Application {
 //                refresh();
 //            }
 //        };
-//        monsterMove = new MoveMonsters(map, this);
-//        Thread thread = new Thread(monsterMove);
-//        thread.start();
+        monsterMove = new MoveMonsters(map, this);
+        Thread thread = new Thread(monsterMove);
+        thread.start();
 
     }
 
@@ -107,7 +107,7 @@ public class Main extends Application {
     }
 
     public void refresh() {
-        monstersMove();
+//        monstersMove();
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());

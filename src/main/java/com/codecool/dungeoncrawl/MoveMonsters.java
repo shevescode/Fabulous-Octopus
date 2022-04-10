@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.logic.actors.Spider;
 
 public class MoveMonsters implements Runnable {
     private GameMap map;
@@ -18,11 +19,18 @@ public class MoveMonsters implements Runnable {
         synchronized (GameMap.class) {
             for (int i = 0; i < 100_000; i++) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
+                    for (Monster monster : map.getAllMonsters()) {
+                        if(monster instanceof Spider) {
+                            monster.monsterMakeMove();
+                        }
+                    }
+                    main.refresh();
+                    Thread.sleep(500);
                     for (Monster monster : map.getAllMonsters()) {
                         monster.monsterMakeMove();
-                        main.refresh();
                     }
+                    main.refresh();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
