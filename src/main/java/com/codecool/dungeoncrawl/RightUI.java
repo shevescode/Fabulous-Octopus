@@ -2,29 +2,49 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
+
 public class RightUI extends GridPane {
+
     private UIInventory inventory;
     private Label healthLabel;
     private Label attackLabel;
 
-
-    private Button button;
+    private Button pickUpButton;
     private Player player;
-    private Integer asd = 2;
+    private Stage stage;
+
+    private Canvas canvas;
+    private GraphicsContext context;
+    private GridPane chestLootGrid;
+
+
 
     public RightUI(Player player) {
         super();
+//        this.setGridLinesVisible(true);
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
-        this.button = new Button("Pick up item");
+
+        this.pickUpButton = new Button("Pick up item");
+
+        this.stage = new Stage();
+
+        this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
+        this.context = canvas.getGraphicsContext2D();
+        this.chestLootGrid = new GridPane();
 
         setPrefWidth(200);
         setPadding(new Insets(10));
@@ -32,10 +52,11 @@ public class RightUI extends GridPane {
         add(healthLabel, 1, 0);
         add(new Label("Attack: "), 0, 1);
         add(attackLabel, 1, 1);
-        add(button, 2, 0);
+        add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();
-        add(inventory, 0, 2, 2, 1);
-        button.setFocusTraversable(false);
+        add(inventory, 0, 2, 3, 1);
+        pickUpButton.setFocusTraversable(false);
+        addChestLootLabel();
 
     }
 
@@ -54,24 +75,53 @@ public class RightUI extends GridPane {
 
     }
 
+    public void addChestLootLabel() {
+        add(new Label("Chest loot: "), 0, 12);
+        add(chestLootGrid, 0, 13, 2, 1);
+    }
+
     public void showPickButton() {
-        button.setVisible(true);
+        pickUpButton.setVisible(true);
+
     }
 
     public void hideButton() {
-        button.setVisible(false);
+        pickUpButton.setVisible(false);
     }
 
     public void buttonOnClick(Cell cell) {
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                player.pickUpItem(cell.getItem());
-                cell.setItem(null);
-               hideButton();
-               setAttackLabel();
+                if (cell.isItemOnCell()) {
+                    player.pickUpItem(cell.getItem());
+                    cell.setItem(null);
+//                    setAttackLabel();
+                } else {
+                    player.pickUpItem(((Chest) cell.getMapObject()).getItem());
+                    ((Chest) cell.getMapObject()).removeItem();
+
+                }
+                setAttackLabel();
+                setHealthLabel();
+                hideButton();
             }
         });
+    }
+
+    public void checkChestLoot(Cell cell) {
+        if (((Chest) cell.getMapObject()).isNotEmpty()) {
+//            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
+            Tiles.drawTile(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
+            chestLootGrid.add(canvas, 0, 0);
+        } else {
+            System.out.println("empty"); /*TODO:dorobić coś co bedzie obsługiwało wyjątek pustej skrzynki*/
+        }
+
+    }
+
+    public void clearChestLootGrid() {
+        chestLootGrid.getChildren().clear();
     }
 
 }

@@ -7,10 +7,11 @@ public class Sword extends Item {
 
     public Sword(Cell cell) {
         super(cell);
+
     }
 
     public Sword() {
-        super();
+
     }
 
     public String getTileName() {
@@ -23,6 +24,6 @@ public class Sword extends Item {
 
     @Override
     public String toString() {
-        return "Sword - " + damage + " attack";
+        return "Sword - " + damage + " attack points";
     }
 }

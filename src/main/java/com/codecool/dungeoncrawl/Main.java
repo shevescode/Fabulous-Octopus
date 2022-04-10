@@ -7,6 +7,8 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Spider;
+import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -54,6 +56,7 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
+
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
@@ -85,8 +88,10 @@ public class Main extends Application {
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+
         rightUI.setHealthLabel();
         rightUI.setAttackLabel();
+
         switch (keyEvent.getCode()) {
             case UP, W -> {
                 map.getPlayer().playerMakeMove(0, -1);
@@ -102,6 +107,7 @@ public class Main extends Application {
                 map.getPlayer().playerMakeMove(-1, 0);
                 map.decrementXOffset();
                 refresh();
+
             }
             case D, RIGHT -> {
                 map.getPlayer().playerMakeMove(1, 0);
@@ -117,12 +123,17 @@ public class Main extends Application {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         rightUI.hideButton();
+        rightUI.clearChestLootGrid();
 
         for (int x = getXStart(); x < getXEnd(); x++) {
             for (int y = getYStart(); y < getYEnd(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.isActorOnCell()) {
                     if (cell.getActor() instanceof Player && cell.isItemOnCell()) {
+                        rightUI.showPickButton();
+                        rightUI.buttonOnClick(cell);
+                    } else if (isPlayerStandingOnChest() && cell.isMapObjectOnCell()) {
+                        rightUI.checkChestLoot(cell);
                         rightUI.showPickButton();
                         rightUI.buttonOnClick(cell);
                     }
@@ -202,6 +213,9 @@ public class Main extends Application {
         return map.getPlayer().getCell().getType() == CellType.STAIRS_UP;
     }
 
+    private boolean isPlayerStandingOnChest() {
+        return map.getPlayer().getCell().getType() == CellType.CHEST;
+    }
 
     private void monstersMove() {
         for (Monster monster : map.getAllMonsters()) {

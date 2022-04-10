@@ -49,7 +49,9 @@ public class Player extends Actor {
 
     public void pickUpItem(Item item) {
         if (item instanceof Sword) {
-            setAttack(getAttack() + ((Sword) item).getDamage());
+            addAttackPoints(item);
+        } else if (item instanceof  HealthPotion) {
+            addHealthPoints(item);
         }
         inventory.add(item);
     }
@@ -74,6 +76,7 @@ public class Player extends Actor {
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
         ((Chest) cell.getMapObject()).openChest();
+
     }
 
     public void removeKey(Class<?> keyType) {
@@ -84,9 +87,12 @@ public class Player extends Actor {
         inventory.remove(key);
     }
 
+    private void addAttackPoints(Item chestItem) {
+        setAttack(getAttack() + ((Sword) chestItem).getDamage());
+    }
 
-//    private void obtainObject() {
-// random integer and switch statement for chosing item -> health potion, sword, hammer, łuk XDDD
-//    }
+    private void addHealthPoints(Item chestItem) {
+        setHealth(getHealth() + ((HealthPotion) chestItem).getHealth());
+    }
 
 }

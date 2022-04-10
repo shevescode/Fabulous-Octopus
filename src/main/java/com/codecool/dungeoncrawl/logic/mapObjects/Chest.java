@@ -1,12 +1,11 @@
 package com.codecool.dungeoncrawl.logic.mapObjects;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
 public class Chest extends MapObject implements Lootable {
     private boolean open;
-    private final Item item;
+    private Item item;
 
     public Chest(Cell cell) {
         super(cell);
@@ -16,7 +15,7 @@ public class Chest extends MapObject implements Lootable {
     }
 
     public String getTileName() {
-        if(open) {
+        if (open) {
             return "openChest";
         } else {
             return "closedChest";
@@ -34,5 +33,13 @@ public class Chest extends MapObject implements Lootable {
 
     public Item getItem() {
         return item;
+    }
+
+    public void removeItem() {
+        this.item = null;
+    }
+
+    public boolean isNotEmpty() {
+        return item != null;
     }
 }

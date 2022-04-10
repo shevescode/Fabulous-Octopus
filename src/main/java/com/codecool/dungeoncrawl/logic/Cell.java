@@ -2,7 +2,6 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 
 public class Cell implements Drawable {
@@ -85,6 +84,7 @@ public class Cell implements Drawable {
     public boolean isActorOnCell() {
         return getActor() != null;
     }
+
     public boolean isItemOnCell() {
         return getItem() != null;
     }
