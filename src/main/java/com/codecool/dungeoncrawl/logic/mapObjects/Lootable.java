@@ -13,7 +13,7 @@ public interface Lootable {
 
     default List<Item> drawItem() {
         List<Item> itemsInChest = new ArrayList<>();
-        int numberOfItems = new Random().nextInt(0, 4);
+        int numberOfItems = new Random().nextInt(0, 3);
         for (int x = 0; x < numberOfItems; x++) {
             int randomInt = new Random().nextInt(0, 3);
             switch (randomInt) {
@@ -26,9 +26,7 @@ public interface Lootable {
                 case 2 -> {
                     itemsInChest.add(new Hammer());
                 }
-//                case 2-> {
-//                    itemsInChest.add(new Hammer());
-//                }
+
             }
 
         }
