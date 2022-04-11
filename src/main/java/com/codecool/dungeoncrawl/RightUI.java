@@ -105,6 +105,7 @@ public class RightUI extends GridPane {
                 setAttackLabel();
                 setHealthLabel();
                 hideButton();
+                clearChestLootGrid();
             }
         });
     }

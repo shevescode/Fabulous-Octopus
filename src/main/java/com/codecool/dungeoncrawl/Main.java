@@ -6,17 +6,13 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Spider;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
-
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -63,6 +59,10 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
+        rightUI.setHealthLabel();
+        rightUI.setAttackLabel();
+        rightUI.hideButton();
+        rightUI.clearChestLootGrid();
 
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
@@ -91,6 +91,8 @@ public class Main extends Application {
 
         rightUI.setHealthLabel();
         rightUI.setAttackLabel();
+        rightUI.hideButton();
+        rightUI.clearChestLootGrid();
 
         switch (keyEvent.getCode()) {
             case UP, W -> {
@@ -115,6 +117,14 @@ public class Main extends Application {
                 refresh();
             }
         }
+        if (map.getPlayer().getCell().isItemOnCell()) {
+            rightUI.showPickButton();
+            rightUI.buttonOnClick(map.getPlayer().getCell());
+        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest)map.getPlayer().getCell().getMapObject()).getItem() != null) {
+            rightUI.checkChestLoot(map.getPlayer().getCell());
+            rightUI.showPickButton();
+            rightUI.buttonOnClick(map.getPlayer().getCell());
+        }
     }
 
     public void refresh() {
@@ -122,21 +132,12 @@ public class Main extends Application {
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        rightUI.hideButton();
-        rightUI.clearChestLootGrid();
+
 
         for (int x = getXStart(); x < getXEnd(); x++) {
             for (int y = getYStart(); y < getYEnd(); y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.isActorOnCell()) {
-                    if (cell.getActor() instanceof Player && cell.isItemOnCell()) {
-                        rightUI.showPickButton();
-                        rightUI.buttonOnClick(cell);
-                    } else if (isPlayerStandingOnChest() && cell.isMapObjectOnCell()) {
-                        rightUI.checkChestLoot(cell);
-                        rightUI.showPickButton();
-                        rightUI.buttonOnClick(cell);
-                    }
                     Tiles.drawTile(context, cell.getActor(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
