@@ -30,7 +30,6 @@ public class RightUI extends GridPane {
     private GridPane chestLootGrid;
 
 
-
     public RightUI(Player player) {
         super();
 //        this.setGridLinesVisible(true);
@@ -42,10 +41,10 @@ public class RightUI extends GridPane {
 
         this.stage = new Stage();
 
-        this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
+        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
         this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
-
+        this.setGridLinesVisible(true);
         setPrefWidth(200);
         setPadding(new Insets(10));
         add(new Label("Health: "), 0, 0);
@@ -105,6 +104,7 @@ public class RightUI extends GridPane {
                 setAttackLabel();
                 setHealthLabel();
                 hideButton();
+                clearChestLootGrid();
             }
         });
     }
@@ -112,8 +112,19 @@ public class RightUI extends GridPane {
     public void checkChestLoot(Cell cell) {
         if (((Chest) cell.getMapObject()).isNotEmpty()) {
 //            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
-            Tiles.drawTile(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 0);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 0);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 0);
+
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 1);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 1);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 1);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 1);
+            chestLootGrid.setGridLinesVisible(true);
             chestLootGrid.add(canvas, 0, 0);
+//            chestLootGrid.add(canvas, 1, 0);
+//            chestLootGrid.add(canvas, 0, 2);
         } else {
             System.out.println("empty"); /*TODO:dorobić coś co bedzie obsługiwało wyjątek pustej skrzynki*/
         }
@@ -122,6 +133,18 @@ public class RightUI extends GridPane {
 
     public void clearChestLootGrid() {
         chestLootGrid.getChildren().clear();
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 0);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 0);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 0);
+//
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 1);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 1);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 1);
+//        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 1);
+//        chestLootGrid.setGridLinesVisible(true);
+//        chestLootGrid.add(canvas, 0, 0);
+
     }
 
 }
