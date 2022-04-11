@@ -120,7 +120,7 @@ public class Main extends Application {
         if (map.getPlayer().getCell().isItemOnCell()) {
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
-        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest)map.getPlayer().getCell().getMapObject()).getItem() != null) {
+        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest)map.getPlayer().getCell().getMapObject()).isNotEmpty()) {
             rightUI.checkChestLoot(map.getPlayer().getCell());
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());

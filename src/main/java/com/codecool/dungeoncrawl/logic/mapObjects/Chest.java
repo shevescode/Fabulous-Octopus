@@ -3,14 +3,18 @@ package com.codecool.dungeoncrawl.logic.mapObjects;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
+import java.util.List;
+
 public class Chest extends MapObject implements Lootable {
     private boolean open;
     private Item item;
+    private List<Item> itemInChest;
 
     public Chest(Cell cell) {
         super(cell);
         open = false;
-        item = drawItem();
+        itemInChest = drawItem();
+        System.out.println(itemInChest.size());
 
     }
 
@@ -21,6 +25,10 @@ public class Chest extends MapObject implements Lootable {
             return "closedChest";
         }
 
+    }
+
+    public List<Item> getItemInChest() {
+        return itemInChest;
     }
 
     public boolean isOpen() {
@@ -40,6 +48,6 @@ public class Chest extends MapObject implements Lootable {
     }
 
     public boolean isNotEmpty() {
-        return item != null;
+        return itemInChest != null;
     }
 }

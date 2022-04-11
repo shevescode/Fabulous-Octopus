@@ -75,8 +75,8 @@ public class RightUI extends GridPane {
     }
 
     public void addChestLootLabel() {
-        add(new Label("Chest loot: "), 0, 12);
-        add(chestLootGrid, 0, 13, 2, 1);
+        add(new Label("LOOT: "), 0, 13);
+        add(chestLootGrid, 0, 14, 2, 1);
     }
 
     public void showPickButton() {
@@ -110,29 +110,18 @@ public class RightUI extends GridPane {
     }
 
     public void checkChestLoot(Cell cell) {
-        if (((Chest) cell.getMapObject()).isNotEmpty()) {
+        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemInChest().size(); i++) {
+
 //            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 0);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 0);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 0);
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemInChest().get(i), i, 0);
 
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 1);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 1);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 1);
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 3, 1);
-            chestLootGrid.setGridLinesVisible(true);
-            chestLootGrid.add(canvas, 0, 0);
-//            chestLootGrid.add(canvas, 1, 0);
-//            chestLootGrid.add(canvas, 0, 2);
-        } else {
-            System.out.println("empty"); /*TODO:dorobić coś co bedzie obsługiwało wyjątek pustej skrzynki*/
         }
-
+        chestLootGrid.add(canvas, 0, 0);
     }
 
     public void clearChestLootGrid() {
         chestLootGrid.getChildren().clear();
+
 //        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
 //        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 1, 0);
 //        Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItem(), 2, 0);
