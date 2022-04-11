@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.logic.mapObjects;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
 import java.util.List;

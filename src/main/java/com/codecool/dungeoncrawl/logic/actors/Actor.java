@@ -3,21 +3,24 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.mapObjects.DeadBody;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
-    private int health;
+    private SimpleIntegerProperty health;
     private int attack;
 
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
+        health = new SimpleIntegerProperty(this, "health");
     }
 
     public int getHealth() {
-        return health;
+        return health.get();
     }
 
     public Cell getCell() {
@@ -37,7 +40,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void killActor() {
-        health = 0;
+        health.set(0);
         cell.setActor(null);
         cell.setMapObject(new DeadBody(cell));
         cell = null;
@@ -67,7 +70,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health.set(health);
     }
 
     public void setAttack(int attack) {
@@ -87,24 +90,19 @@ public abstract class Actor implements Drawable {
         }
     }
 
-//    public String getAttackToString() {
-//        return String.valueOf(attack);
-//    }
-//
-//    public String getHealthToString() {
-//        return String.valueOf(health);
-//    }
-
     private boolean canSurviveAttack(int attack) {
-        return health > attack;
+        return health.get() > attack;
     }
 
     private void subtractHealthPoints(int i) {
         if(i> 0) {
-            health -= i;
+            health.set(health.get() - i);
         }
     }
 
+    public ObservableValue<?> getHealthProperty() {
+        return health;
+    }
 
 
 }
