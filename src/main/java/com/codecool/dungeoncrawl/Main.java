@@ -59,7 +59,7 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-        rightUI.setHealthLabel();
+//        rightUI.setHealthLabel();
         rightUI.setAttackLabel();
         rightUI.hideButton();
         rightUI.clearChestLootGrid();
@@ -89,8 +89,8 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
 
-        rightUI.setHealthLabel();
-        rightUI.setAttackLabel();
+//        rightUI.setHealthLabel();
+
         rightUI.hideButton();
         rightUI.clearChestLootGrid();
 
@@ -129,6 +129,7 @@ public class Main extends Application {
 
     public void refresh() {
 //        monstersMove();
+        rightUI.setAttackLabel();
 
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());

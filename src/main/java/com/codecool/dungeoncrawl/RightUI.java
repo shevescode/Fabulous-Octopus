@@ -3,12 +3,12 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -55,6 +55,10 @@ public class RightUI extends GridPane {
         add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();
         add(inventory, 0, 2, 3, 1);
+        Label label = new Label();
+        healthLabel.setText(Integer.toString(player.getHealth()));
+        healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
+        add(label, 0,3,3,1);
         pickUpButton.setFocusTraversable(false);
         addChestLootLabel();
 
@@ -65,10 +69,10 @@ public class RightUI extends GridPane {
         return inventory;
     }
 
-    public void setHealthLabel() {
-        healthLabel.setText("" + player.getHealth());
-
-    }
+//    public void setHealthLabel() {
+//        healthLabel.setText("" + player.getHealth());
+//
+//    }
 
     public void setAttackLabel() {
         attackLabel.setText("" + player.getAttack());
@@ -103,7 +107,7 @@ public class RightUI extends GridPane {
 
                 }
                 setAttackLabel();
-                setHealthLabel();
+//                setHealthLabel();
                 hideButton();
                 clearChestLootGrid();
             }

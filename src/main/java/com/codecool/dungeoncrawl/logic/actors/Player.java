@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import javafx.beans.value.ObservableValue;
 
 import java.util.List;
 
@@ -94,5 +95,6 @@ public class Player extends Actor {
     private void addHealthPoints(Item chestItem) {
         setHealth(getHealth() + ((HealthPotion) chestItem).getHealth());
     }
+
 
 }
