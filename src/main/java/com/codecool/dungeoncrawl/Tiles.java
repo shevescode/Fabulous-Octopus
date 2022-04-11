@@ -32,10 +32,13 @@ public class Tiles {
         tileMap.put("stairsDown", new Tile(3, 6));
         tileMap.put("closedDoor", new Tile(0, 9));
         tileMap.put("openDoor", new Tile(2, 9));
+
         tileMap.put("player", new Tile(25, 8));
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("ghost", new Tile(26, 6));
         tileMap.put("witch", new Tile(24, 1));
+        tileMap.put("spider", new Tile(30, 5));
+
         tileMap.put("door key", new Tile(17, 23));
         tileMap.put("chest key", new Tile(16, 23));
 
@@ -44,7 +47,8 @@ public class Tiles {
         tileMap.put("closedChest", new Tile(8, 6));
         tileMap.put("openChest", new Tile(9, 6));
         tileMap.put("deadBody", new Tile(0, 15));
-        tileMap.put("spider", new Tile(30, 5));
+        tileMap.put("hammer", new Tile(5, 29));
+
 
 
     }
