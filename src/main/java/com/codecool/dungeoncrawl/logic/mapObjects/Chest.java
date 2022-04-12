@@ -8,13 +8,13 @@ import java.util.List;
 public class Chest extends MapObject implements Lootable {
     private boolean open;
     private Item item;
-    private List<Item> itemInChest;
+    private List<Item> itemsInChest;
 
     public Chest(Cell cell) {
         super(cell);
         open = false;
-        itemInChest = drawItem();
-        System.out.println(itemInChest.size());
+        itemsInChest = drawItem();
+
 
     }
 
@@ -27,8 +27,8 @@ public class Chest extends MapObject implements Lootable {
 
     }
 
-    public List<Item> getItemInChest() {
-        return itemInChest;
+    public List<Item> getItemsInChest() {
+        return itemsInChest;
     }
 
     public boolean isOpen() {
@@ -43,11 +43,11 @@ public class Chest extends MapObject implements Lootable {
         return item;
     }
 
-    public void removeItem() {
-        this.item = null;
+    public void removeItems() {
+        this.itemsInChest = null;
     }
 
     public boolean isNotEmpty() {
-        return itemInChest != null;
+        return itemsInChest != null;
     }
 }

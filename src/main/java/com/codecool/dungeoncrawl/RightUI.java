@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.beans.binding.Bindings;
@@ -26,13 +27,16 @@ public class RightUI extends GridPane {
     private Stage stage;
 
     private Canvas canvas;
+    private Canvas canvas1;
     private GraphicsContext context;
+    private GraphicsContext context1;
     private GridPane chestLootGrid;
+    private GridPane lootPlaceGrid;
 
 
     public RightUI(Player player) {
         super();
-//        this.setGridLinesVisible(true);
+
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
@@ -44,6 +48,7 @@ public class RightUI extends GridPane {
         this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
         this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
+
         this.setGridLinesVisible(true);
         setPrefWidth(200);
         setPadding(new Insets(10));
@@ -57,10 +62,15 @@ public class RightUI extends GridPane {
         Label label = new Label();
         healthLabel.setText(Integer.toString(player.getHealth()));
         healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
-        add(label, 0,3,3,1);
+        add(label, 0, 3, 3, 1);
         pickUpButton.setFocusTraversable(false);
         addChestLootLabel();
 
+//        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+//        this.context1 = canvas.getGraphicsContext2D();
+//        this.lootPlaceGrid = new GridPane();
+//        add(lootPlaceGrid,0, 14, 2, 1);
+//        drawLootPlace();
     }
 
 
@@ -68,10 +78,11 @@ public class RightUI extends GridPane {
         return inventory;
     }
 
-//    public void setHealthLabel() {
+    //    public void setHealthLabel() {
 //        healthLabel.setText("" + player.getHealth());
 //
 //    }
+
 
     public void setAttackLabel() {
         attackLabel.setText("" + player.getAttack());
@@ -101,9 +112,7 @@ public class RightUI extends GridPane {
                     cell.setItem(null);
 //                    setAttackLabel();
                 } else {
-                    player.pickUpItem(((Chest) cell.getMapObject()).getItem());
-                    ((Chest) cell.getMapObject()).removeItem();
-
+                    addAllItemsToInv(cell);
                 }
                 setAttackLabel();
 //                setHealthLabel();
@@ -113,11 +122,19 @@ public class RightUI extends GridPane {
         });
     }
 
-    public void checkChestLoot(Cell cell) {
-        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemInChest().size(); i++) {
+    private void addAllItemsToInv(Cell cell) {
+        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+            player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(i));
 
-//            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemInChest().get(i), i, 0);
+        }
+        ((Chest) cell.getMapObject()).removeItems();
+        clearChestLootGrid();
+
+    }
+
+    public void checkChestLoot(Cell cell) {
+        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), i, 0);
 
         }
         chestLootGrid.add(canvas, 0, 0);
@@ -139,5 +156,18 @@ public class RightUI extends GridPane {
 //        chestLootGrid.add(canvas, 0, 0);
 
     }
+
+//    public void drawLootPlace() {
+//        for (int i = 0; i < 4; i++) {
+//            for (int j = 0; j < 4; j++) {
+//                Tiles.drawWTileWithMargin(context1, CellType.valueOf("FLOOR"), j, i);
+//
+//            }
+//
+//        }
+//        lootPlaceGrid.add(canvas, 1, 1);
+//        getChildren().remove(lootPlaceGrid);
+//    }
+
 
 }

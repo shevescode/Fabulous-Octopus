@@ -14,6 +14,7 @@ public interface Lootable {
     default List<Item> drawItem() {
         List<Item> itemsInChest = new ArrayList<>();
         int numberOfItems = new Random().nextInt(0, 3);
+        System.out.println(numberOfItems);
         for (int x = 0; x < numberOfItems; x++) {
             int randomInt = new Random().nextInt(0, 3);
             switch (randomInt) {
