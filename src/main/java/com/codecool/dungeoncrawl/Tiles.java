@@ -59,9 +59,15 @@ public class Tiles {
                 x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
     }
 
+    public static Map<String, Tile> getTileMap() {
+        return tileMap;
+    }
+
     public static void drawWTileWithMargin(GraphicsContext context, Drawable d, int x, int y) {
         Tile tile = tileMap.get(d.getTileName());
         context.drawImage(tileset, tile.x, tile.y, tile.w, tile.h,
                 x * TILE_WIDTH + x * 2, y * TILE_WIDTH + 2 + y * 2, TILE_WIDTH, TILE_WIDTH);
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,8 +52,8 @@ public class RightUI extends GridPane {
 
         this.stage = new Stage();
 
-        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
-        this.context = canvas.getGraphicsContext2D();
+//        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+//        this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
 
         this.setGridLinesVisible(true);
@@ -74,7 +75,7 @@ public class RightUI extends GridPane {
 
 //        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
 //        this.context1 = canvas.getGraphicsContext2D();
-//        this.lootPlaceGrid = new GridPane();
+        this.lootPlaceGrid = new GridPane();
 //        add(lootPlaceGrid,0, 14, 2, 1);
 //        drawLootPlace();
     }
@@ -140,11 +141,14 @@ public class RightUI extends GridPane {
 
     public void checkChestLoot(Cell cell) {
         for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+            this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+            this.context = canvas.getGraphicsContext2D();
+
             Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), i, 0);
 
+            lootPlaceGrid.add(canvas, i, 0);
         }
-
-        chestLootGrid.add(canvas, 0, 0);
+        chestLootGrid.add(lootPlaceGrid, 0, 0);
     }
 
     public void clearChestLootGrid() {
@@ -177,18 +181,42 @@ public class RightUI extends GridPane {
 //    }
 
     public void addGridEvent(Cell cell) {
-        for (Node node : chestLootGrid.getChildren()) {
-            node.setOnMouseClicked(new EventHandler<>() {
+        System.out.println(lootPlaceGrid.getChildren().size() + "ROZMIAR");
+        lootPlaceGrid.getChildren().forEach(item -> {
+
+            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     if (event.getClickCount() == 2) {
+                        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+                            if (chestLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
+                                System.out.println("WESZŁO TUTAJ");
+
+                            }
+
+                        }
+
+//                        System.out.println(context.getCanvas());
+//                        System.out.println(event.getTarget());
+//                        System.out.println(event.getSource());7
+//                        System.out.println(Tiles.getTileMap().get("health potion") + "!!!!!!!!");
+//                        System.out.println(canvas.getGraphicsContext2D());
+//                        System.out.println(((Chest) cell.getMapObject()).getItemsInChest().get(0) + "lista itemów skrzynce");
+                        System.out.println(lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) + "INDEKS KLIKNIĘTY CANVAS");
+                        System.out.println(lootPlaceGrid.getChildren());
+                        System.out.println(chestLootGrid.getChildren());
+                        System.out.println(event.getSource());
+                        System.out.println("ssssssssssssssss");
                         player.pickUpItem(((Chest) cell.getMapObject()).getItem());
+
+//                    ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i) == chestLootGrid.getChildren().indexOf(i)
                     }
 
                 }
             });
-        }
+        });
     }
+}
 
 //    public void addGridEvent() {
 //
@@ -199,7 +227,7 @@ public class RightUI extends GridPane {
 //                System.out.println("ActionEvent");
 //            }
 //        });
+////        button.setVisible(false);
 //        chestLootGrid.getChildren().add(button);
 //
 //    }
-}
