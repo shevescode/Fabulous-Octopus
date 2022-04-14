@@ -1,19 +1,25 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.PickResult;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+
+import javax.crypto.spec.PSource;
 
 
 public class RightUI extends GridPane {
@@ -137,6 +143,7 @@ public class RightUI extends GridPane {
             Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), i, 0);
 
         }
+
         chestLootGrid.add(canvas, 0, 0);
     }
 
@@ -169,5 +176,30 @@ public class RightUI extends GridPane {
 //        getChildren().remove(lootPlaceGrid);
 //    }
 
+    public void addGridEvent(Cell cell) {
+        for (Node node : chestLootGrid.getChildren()) {
+            node.setOnMouseClicked(new EventHandler<>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getClickCount() == 2) {
+                        player.pickUpItem(((Chest) cell.getMapObject()).getItem());
+                    }
 
+                }
+            });
+        }
+    }
+
+//    public void addGridEvent() {
+//
+//        Button button = new Button();
+//        //You can use OnAction
+//        button.addEventHandler(EventType.ROOT, (event) -> {
+//            if (event.getEventType() == ActionEvent.ACTION) {
+//                System.out.println("ActionEvent");
+//            }
+//        });
+//        chestLootGrid.getChildren().add(button);
+//
+//    }
 }

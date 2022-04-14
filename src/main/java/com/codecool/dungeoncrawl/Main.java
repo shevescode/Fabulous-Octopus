@@ -122,7 +122,7 @@ public class Main extends Application {
             rightUI.checkChestLoot(map.getPlayer().getCell());
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
-
+            rightUI.addGridEvent(map.getPlayer().getCell());
         }
     }
 
