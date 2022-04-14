@@ -22,3 +22,4 @@ TODO:
 - add monster loot
 - add more levels
 - add more eye catching inventory
+- add menu
