@@ -3,24 +3,17 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.PickResult;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-
-import javax.crypto.spec.PSource;
 
 
 public class RightUI extends GridPane {
@@ -52,11 +45,8 @@ public class RightUI extends GridPane {
 
         this.stage = new Stage();
 
-//        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
-//        this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
 
-        this.setGridLinesVisible(true);
         setPrefWidth(200);
         setPadding(new Insets(10));
         add(new Label("Health: "), 0, 0);
@@ -73,11 +63,8 @@ public class RightUI extends GridPane {
         pickUpButton.setFocusTraversable(false);
         addChestLootLabel();
 
-//        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
-//        this.context1 = canvas.getGraphicsContext2D();
         this.lootPlaceGrid = new GridPane();
-//        add(lootPlaceGrid,0, 14, 2, 1);
-//        drawLootPlace();
+
     }
 
 
@@ -118,9 +105,10 @@ public class RightUI extends GridPane {
                     player.pickUpItem(cell.getItem());
                     cell.setItem(null);
 //                    setAttackLabel();
-                } else {
-                    addAllItemsToInv(cell);
                 }
+//                } else {
+//                    addAllItemsToInv(cell);
+//                }
                 setAttackLabel();
 //                setHealthLabel();
                 hideButton();
@@ -134,7 +122,7 @@ public class RightUI extends GridPane {
             player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(i));
 
         }
-        ((Chest) cell.getMapObject()).removeItems();
+//        ((Chest) cell.getMapObject()).removeItems();
         clearChestLootGrid();
 
     }
@@ -182,34 +170,21 @@ public class RightUI extends GridPane {
 
     public void addGridEvent(Cell cell) {
         System.out.println(lootPlaceGrid.getChildren().size() + "ROZMIAR");
-        lootPlaceGrid.getChildren().forEach(item -> {
 
+        lootPlaceGrid.getChildren().forEach(item -> {
             item.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getClickCount() == 2) {
-                        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
-                            if (chestLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
-                                System.out.println("WESZŁO TUTAJ");
+                    int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
+                    if (event.getClickCount() == 1) {
 
+                        for (int i = 0; i < chestLootGrid.getChildren().size(); i++) {
+                            if (chestLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
+                                player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(clickedLoot));
                             }
 
                         }
-
-//                        System.out.println(context.getCanvas());
-//                        System.out.println(event.getTarget());
-//                        System.out.println(event.getSource());7
-//                        System.out.println(Tiles.getTileMap().get("health potion") + "!!!!!!!!");
-//                        System.out.println(canvas.getGraphicsContext2D());
-//                        System.out.println(((Chest) cell.getMapObject()).getItemsInChest().get(0) + "lista itemów skrzynce");
-                        System.out.println(lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) + "INDEKS KLIKNIĘTY CANVAS");
-                        System.out.println(lootPlaceGrid.getChildren());
-                        System.out.println(chestLootGrid.getChildren());
-                        System.out.println(event.getSource());
-                        System.out.println("ssssssssssssssss");
-                        player.pickUpItem(((Chest) cell.getMapObject()).getItem());
-
-//                    ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i) == chestLootGrid.getChildren().indexOf(i)
+//                        ((Chest) cell.getMapObject()).removeItems();
                     }
 
                 }
@@ -218,16 +193,3 @@ public class RightUI extends GridPane {
     }
 }
 
-//    public void addGridEvent() {
-//
-//        Button button = new Button();
-//        //You can use OnAction
-//        button.addEventHandler(EventType.ROOT, (event) -> {
-//            if (event.getEventType() == ActionEvent.ACTION) {
-//                System.out.println("ActionEvent");
-//            }
-//        });
-////        button.setVisible(false);
-//        chestLootGrid.getChildren().add(button);
-//
-//    }

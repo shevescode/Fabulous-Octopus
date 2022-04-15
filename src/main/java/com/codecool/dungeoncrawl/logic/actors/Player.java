@@ -54,7 +54,6 @@ public class Player extends Actor {
         } else if (item instanceof  HealthPotion) {
             addHealthPoints(item);
         }
-        System.out.println(item);
         inventory.add(item);
     }
 

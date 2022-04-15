@@ -120,7 +120,6 @@ public class Main extends Application {
             rightUI.buttonOnClick(map.getPlayer().getCell());
         } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest) map.getPlayer().getCell().getMapObject()).isNotEmpty()) {
             rightUI.checkChestLoot(map.getPlayer().getCell());
-            rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
             rightUI.addGridEvent(map.getPlayer().getCell());
 //            rightUI.addGridEvent();
