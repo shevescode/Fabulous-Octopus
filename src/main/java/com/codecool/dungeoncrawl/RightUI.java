@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.beans.binding.Bindings;
@@ -10,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -45,11 +45,8 @@ public class RightUI extends GridPane {
 
         this.stage = new Stage();
 
-        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
-        this.context = canvas.getGraphicsContext2D();
         this.chestLootGrid = new GridPane();
 
-        this.setGridLinesVisible(true);
         setPrefWidth(200);
         setPadding(new Insets(10));
         add(new Label("Health: "), 0, 0);
@@ -66,11 +63,8 @@ public class RightUI extends GridPane {
         pickUpButton.setFocusTraversable(false);
         addChestLootLabel();
 
-//        this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
-//        this.context1 = canvas.getGraphicsContext2D();
-//        this.lootPlaceGrid = new GridPane();
-//        add(lootPlaceGrid,0, 14, 2, 1);
-//        drawLootPlace();
+        this.lootPlaceGrid = new GridPane();
+
     }
 
 
@@ -111,9 +105,10 @@ public class RightUI extends GridPane {
                     player.pickUpItem(cell.getItem());
                     cell.setItem(null);
 //                    setAttackLabel();
-                } else {
-                    addAllItemsToInv(cell);
                 }
+//                } else {
+//                    addAllItemsToInv(cell);
+//                }
                 setAttackLabel();
 //                setHealthLabel();
                 hideButton();
@@ -127,17 +122,21 @@ public class RightUI extends GridPane {
             player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(i));
 
         }
-        ((Chest) cell.getMapObject()).removeItems();
+//        ((Chest) cell.getMapObject()).removeItems();
         clearChestLootGrid();
 
     }
 
     public void checkChestLoot(Cell cell) {
         for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+            this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+            this.context = canvas.getGraphicsContext2D();
+
             Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), i, 0);
 
+            lootPlaceGrid.add(canvas, i, 0);
         }
-        chestLootGrid.add(canvas, 0, 0);
+        chestLootGrid.add(lootPlaceGrid, 0, 0);
     }
 
     public void clearChestLootGrid() {
@@ -169,5 +168,28 @@ public class RightUI extends GridPane {
 //        getChildren().remove(lootPlaceGrid);
 //    }
 
+    public void addGridEvent(Cell cell) {
+        System.out.println(lootPlaceGrid.getChildren().size() + "ROZMIAR");
 
+        lootPlaceGrid.getChildren().forEach(item -> {
+            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
+                    if (event.getClickCount() == 1) {
+
+                        for (int i = 0; i < chestLootGrid.getChildren().size(); i++) {
+                            if (chestLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
+                                player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(clickedLoot));
+                            }
+
+                        }
+//                        ((Chest) cell.getMapObject()).removeItems();
+                    }
+
+                }
+            });
+        });
+    }
 }
+
