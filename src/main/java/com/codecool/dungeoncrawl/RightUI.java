@@ -181,9 +181,11 @@ public class RightUI extends GridPane {
                         for (int i = 0; i < chestLootGrid.getChildren().size(); i++) {
                             if (chestLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
                                 player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(clickedLoot));
+                                lootPlaceGrid.getChildren().remove(clickedLoot);
                             }
 
                         }
+                        ((Chest) cell.getMapObject()).removeItem(clickedLoot);
 //                        ((Chest) cell.getMapObject()).removeItems();
                     }
 
@@ -192,4 +194,3 @@ public class RightUI extends GridPane {
         });
     }
 }
-

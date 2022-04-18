@@ -43,12 +43,8 @@ public class Chest extends MapObject implements Lootable {
         return item;
     }
 
-    public void removeItems() {
-        this.itemsInChest = null;
-    }
-
-    public void removeItem() {
-      this.item = null;
+    public void removeItem(int i) {
+        itemsInChest.remove(i);
     }
 
     public boolean isNotEmpty() {
