@@ -2,27 +2,27 @@ package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 
-public class Sword extends Item {
-    private final int damage = 2;
+public class Hammer extends Item {
+    private final int damage = 5;
 
-    public Sword(Cell cell) {
+    public Hammer(Cell cell) {
         super(cell);
     }
 
-    public Sword() {
+    public Hammer() {
+
     }
 
     public String getTileName() {
-        return "sword";
+        return "hammer";
     }
 
     public int getDamage() {
         return damage;
     }
 
-
     @Override
     public String toString() {
-        return "Sword - " + damage + " attack points";
+        return "Hammer - " + damage + " attack points";
     }
 }
