@@ -7,11 +7,9 @@ public class Sword extends Item {
 
     public Sword(Cell cell) {
         super(cell);
-
     }
 
     public Sword() {
-
     }
 
     public String getTileName() {
@@ -21,6 +19,7 @@ public class Sword extends Item {
     public int getDamage() {
         return damage;
     }
+
 
     @Override
     public String toString() {

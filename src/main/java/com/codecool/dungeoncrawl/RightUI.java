@@ -24,12 +24,9 @@ public class RightUI extends GridPane {
 
     private Button pickUpButton;
     private Player player;
-    private Stage stage;
 
     private Canvas canvas;
-    private Canvas canvas1;
     private GraphicsContext context;
-    private GraphicsContext context1;
     private GridPane mainLootGrid;
     private GridPane lootPlaceGrid;
 
@@ -43,9 +40,8 @@ public class RightUI extends GridPane {
 
         this.pickUpButton = new Button("Pick up item");
 
-        this.stage = new Stage();
-
         this.mainLootGrid = new GridPane();
+        this.lootPlaceGrid = new GridPane();
 
         setPrefWidth(200);
         setPadding(new Insets(10));
@@ -56,16 +52,12 @@ public class RightUI extends GridPane {
         add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();
         add(inventory, 0, 2, 3, 1);
-        Label label = new Label();
         healthLabel.setText(Integer.toString(player.getHealth()));
         healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
-        add(label, 0, 3, 3, 1);
         pickUpButton.setFocusTraversable(false);
         add(mainLootGrid, 0, 14, 2, 1);
-        this.lootPlaceGrid = new GridPane();
 
     }
-
 
     public UIInventory getInventory() {
         return inventory;
@@ -95,7 +87,6 @@ public class RightUI extends GridPane {
 //                    setAttackLabel();
                 }
                 setAttackLabel();
-//                setHealthLabel();
                 hideButton();
             }
         });
@@ -103,7 +94,7 @@ public class RightUI extends GridPane {
 
     public void drawChestLoot(Cell cell) {
         for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
-            this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+            this.canvas = new Canvas(Tiles.TILE_WIDTH * 2 + 4, Tiles.TILE_WIDTH * 2 + 4);
             this.context = canvas.getGraphicsContext2D();
 
             Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), 0, 0);

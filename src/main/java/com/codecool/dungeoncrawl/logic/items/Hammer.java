@@ -7,7 +7,6 @@ public class Hammer extends Item {
 
     public Hammer(Cell cell) {
         super(cell);
-
     }
 
     public Hammer() {
