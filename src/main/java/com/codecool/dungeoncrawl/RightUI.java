@@ -97,18 +97,8 @@ public class RightUI extends GridPane {
                 setAttackLabel();
 //                setHealthLabel();
                 hideButton();
-                clearLootGrids();
             }
         });
-    }
-
-    private void addAllItemsToInv(Cell cell) {
-        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
-            player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(i));
-
-        }
-        clearLootGrids();
-
     }
 
     public void drawChestLoot(Cell cell) {
