@@ -62,12 +62,10 @@ public class Main extends Application {
 //        rightUI.setHealthLabel();
         rightUI.setAttackLabel();
         rightUI.hideButton();
-        rightUI.clearChestLootGrid();
 
         primaryStage.setTitle("Fabulous Octopus");
         primaryStage.show();
         scene.setOnKeyPressed(this::onKeyPressed);
-
 
 
 //        Runnable r = () -> {
@@ -89,10 +87,8 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
 
-//        rightUI.setHealthLabel();
-
         rightUI.hideButton();
-        rightUI.clearChestLootGrid();
+        rightUI.clearLootGrids();
 
         switch (keyEvent.getCode()) {
             case UP, W -> {
@@ -120,10 +116,9 @@ public class Main extends Application {
         if (map.getPlayer().getCell().isItemOnCell()) {
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
-        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest)map.getPlayer().getCell().getMapObject()).getItem() != null) {
-            rightUI.checkChestLoot(map.getPlayer().getCell());
-            rightUI.showPickButton();
-            rightUI.buttonOnClick(map.getPlayer().getCell());
+        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest) map.getPlayer().getCell().getMapObject()).isNotEmpty()) {
+            rightUI.drawChestLoot(map.getPlayer().getCell());
+            rightUI.addGridEvent(map.getPlayer().getCell());
         }
     }
 

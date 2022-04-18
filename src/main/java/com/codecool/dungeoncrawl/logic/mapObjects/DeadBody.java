@@ -3,12 +3,14 @@ package com.codecool.dungeoncrawl.logic.mapObjects;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
+import java.util.List;
+
 public class DeadBody extends MapObject implements Lootable {
-    private final Item item;
+    private List<Item> itemsFromDeadBody;
 
     public DeadBody(Cell cell) {
         super(cell);
-        item = drawItem();
+        itemsFromDeadBody = drawItem();
     }
 
     @Override
@@ -16,7 +18,11 @@ public class DeadBody extends MapObject implements Lootable {
         return "deadBody";
     }
 
-    public Item getItem() {
-        return item;
+    public List<Item> getItemsFromDeadBody() {
+        return itemsFromDeadBody;
     }
+
+//    public Item getItem() {
+//        return item;
+//    }
 }

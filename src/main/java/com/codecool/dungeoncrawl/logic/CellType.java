@@ -1,6 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
-public enum CellType {
+public enum CellType implements Drawable {
     EMPTY("empty"),
     FLOOR("floor"),
     WALL("wall"),

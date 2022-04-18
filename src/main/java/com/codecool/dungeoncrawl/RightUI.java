@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,14 +27,16 @@ public class RightUI extends GridPane {
     private Stage stage;
 
     private Canvas canvas;
+    private Canvas canvas1;
     private GraphicsContext context;
-    private GridPane chestLootGrid;
-
+    private GraphicsContext context1;
+    private GridPane mainLootGrid;
+    private GridPane lootPlaceGrid;
 
 
     public RightUI(Player player) {
         super();
-//        this.setGridLinesVisible(true);
+
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
@@ -42,9 +45,7 @@ public class RightUI extends GridPane {
 
         this.stage = new Stage();
 
-        this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
-        this.context = canvas.getGraphicsContext2D();
-        this.chestLootGrid = new GridPane();
+        this.mainLootGrid = new GridPane();
 
         setPrefWidth(200);
         setPadding(new Insets(10));
@@ -58,9 +59,10 @@ public class RightUI extends GridPane {
         Label label = new Label();
         healthLabel.setText(Integer.toString(player.getHealth()));
         healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
-        add(label, 0,3,3,1);
+        add(label, 0, 3, 3, 1);
         pickUpButton.setFocusTraversable(false);
-        addChestLootLabel();
+        add(mainLootGrid, 0, 14, 2, 1);
+        this.lootPlaceGrid = new GridPane();
 
     }
 
@@ -69,19 +71,9 @@ public class RightUI extends GridPane {
         return inventory;
     }
 
-//    public void setHealthLabel() {
-//        healthLabel.setText("" + player.getHealth());
-//
-//    }
-
     public void setAttackLabel() {
         attackLabel.setText("" + player.getAttack());
 
-    }
-
-    public void addChestLootLabel() {
-        add(new Label("Chest loot: "), 0, 12);
-        add(chestLootGrid, 0, 13, 2, 1);
     }
 
     public void showPickButton() {
@@ -101,32 +93,63 @@ public class RightUI extends GridPane {
                     player.pickUpItem(cell.getItem());
                     cell.setItem(null);
 //                    setAttackLabel();
-                } else {
-                    player.pickUpItem(((Chest) cell.getMapObject()).getItem());
-                    ((Chest) cell.getMapObject()).removeItem();
-
                 }
                 setAttackLabel();
 //                setHealthLabel();
                 hideButton();
-                clearChestLootGrid();
             }
         });
     }
 
-    public void checkChestLoot(Cell cell) {
-        if (((Chest) cell.getMapObject()).isNotEmpty()) {
-//            addChestLootLabel();TODO: zmienić żeby chestlootlabel nie wyświetlał się od początku gry
-            Tiles.drawTile(context, ((Chest) cell.getMapObject()).getItem(), 0, 0);
-            chestLootGrid.add(canvas, 0, 0);
-        } else {
-            System.out.println("empty"); /*TODO:dorobić coś co bedzie obsługiwało wyjątek pustej skrzynki*/
+    public void drawChestLoot(Cell cell) {
+        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
+            this.canvas = new Canvas(Tiles.TILE_WIDTH * 4 + 8, Tiles.TILE_WIDTH * 2 + 4);
+            this.context = canvas.getGraphicsContext2D();
+
+            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), 0, 0);
+
+            lootPlaceGrid.add(canvas, i, 0);
         }
-
+        mainLootGrid.add(lootPlaceGrid, 0, 0);
     }
 
-    public void clearChestLootGrid() {
-        chestLootGrid.getChildren().clear();
+    public void clearLootGrids() {
+        lootPlaceGrid.getChildren().clear();
+        mainLootGrid.getChildren().clear();
     }
 
+//    public void drawLootPlace() {
+//        for (int i = 0; i < 4; i++) {
+//            for (int j = 0; j < 4; j++) {
+//                Tiles.drawWTileWithMargin(context1, CellType.valueOf("FLOOR"), j, i);
+//
+//            }
+//
+//        }
+//        lootPlaceGrid.add(canvas, 1, 1);
+//        getChildren().remove(lootPlaceGrid);
+//    }
+
+    public void addGridEvent(Cell cell) {
+
+        lootPlaceGrid.getChildren().forEach(item -> {
+            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
+                    if (event.getClickCount() == 1) {
+
+                        for (int i = 0; i < mainLootGrid.getChildren().size(); i++) {
+                            if (mainLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
+                                player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(clickedLoot));
+                                lootPlaceGrid.getChildren().remove(clickedLoot);
+                            }
+                        }
+                        ((Chest) cell.getMapObject()).removeItem(clickedLoot);
+                    }
+
+                }
+            });
+        });
+    }
 }
