@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
 import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 
 import java.util.ArrayList;
@@ -65,6 +66,24 @@ public class Cell implements Drawable {
             return null;
         }
 
+    }
+
+    public List<Item> getAllItemsOnCell() {
+        List<Item> itemList = new ArrayList<>();
+        for (MapObject mapObject:mapObjects) {
+            itemList.addAll(((Lootable) mapObject).getLootItems());
+        }
+        return itemList;
+    }
+
+    public void removeItemFromCell(Item item) {
+        try {
+            for (MapObject mapObject : mapObjects) {
+                ((Lootable) mapObject).getLootItems().remove(item);
+            }
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override
