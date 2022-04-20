@@ -50,6 +50,7 @@ public class Main extends Application {
         player = new Player(map.getFirstPlayerCell());
         map.setPlayer(player);
         rightUI = new RightUI(map.getPlayer());
+        rightUI.getInventory().setPlayer(player);
         map.getPlayer().setInventory(rightUI.getInventory().getItems());
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);

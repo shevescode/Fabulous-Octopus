@@ -142,7 +142,7 @@ public class RightUI extends GridPane {
                 player.pickUpItem(itemList.get(counter[0] - 1));
 
                 lootPlaceGrid.getChildren().remove(clickedLoot);
-
+//TODO: problem z dodwaniem itemów do EQ przy dwóch lootach -> np.ze skrzynki dodaje się dwa razy ten sam przedmiot przy dwóch różnych wylosowanych przedmiotach
                 cell.removeItemFromCell(itemList.get(counter[0] - 1));
             });
             counter[0] += 1;
