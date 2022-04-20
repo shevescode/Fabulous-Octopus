@@ -4,11 +4,14 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private Item item;
-    private MapObject mapObject;
+    private List<MapObject> mapObjects = new ArrayList<>();
     private final GameMap gameMap;
     private final int x;
     private final int y;
@@ -41,12 +44,12 @@ public class Cell implements Drawable {
         return item;
     }
 
-    public MapObject getMapObject() {
-        return mapObject;
+    public List<MapObject> getMapObjects() {
+        return mapObjects;
     }
 
-    public void setMapObject(MapObject mapObject) {
-        this.mapObject = mapObject;
+    public void addMapObject(MapObject mapObject) {
+        this.mapObjects.add(mapObject);
     }
 
     public void setItem(Item item) {
@@ -89,7 +92,7 @@ public class Cell implements Drawable {
         return getItem() != null;
     }
     public boolean isMapObjectOnCell() {
-        return getMapObject() != null;
+        return getMapObjects().size() != 0;
     }
 
     public boolean isNextCellOnMap(Cell cell) {

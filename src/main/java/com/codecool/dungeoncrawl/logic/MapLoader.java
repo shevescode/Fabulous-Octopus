@@ -60,7 +60,7 @@ public class MapLoader {
                         }
                         case 'c' -> {
                             cell.setType(CellType.CHEST);
-                            cell.setMapObject(new Chest(cell));
+                            cell.addMapObject(new Chest(cell));
                         }
                         case 'g' -> {
                             cell.setType(CellType.EMPTY);

@@ -64,7 +64,7 @@ class PlayerMakeMoveTest {
     public void givenPlayerAndNextMoveCoordinates_whenPlayerMakeMove_thenPlayerCanNotStandOnChest() {
         gameMap.getCell(2,0).setType(CellType.CHEST);
         Chest chest = new Chest(gameMap.getCell(2,0));
-        gameMap.getCell(2,0).setMapObject(chest);
+        gameMap.getCell(2,0).addMapObject(chest);
         // given
         Player player = new Player(gameMap.getCell(1, 0));
         int dx = 1;
@@ -121,7 +121,7 @@ class PlayerMakeMoveTest {
     public void givenPlayerAndNextMoveCoordinates_whenPlayerMakeMove_thenPlayerCanStandOnOpenChest() {
         gameMap.getCell(2,0).setType(CellType.CHEST);
         Chest chest = new Chest(gameMap.getCell(2,0));
-        gameMap.getCell(2,0).setMapObject(chest);
+        gameMap.getCell(2,0).addMapObject(chest);
         chest.openChest();
         // given
         Player player = new Player(gameMap.getCell(1, 0));

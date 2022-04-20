@@ -2,18 +2,23 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
+import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class RightUI extends GridPane {
@@ -33,6 +38,7 @@ public class RightUI extends GridPane {
 
     public RightUI(Player player) {
         super();
+
 
         this.player = player;
         this.healthLabel = new Label();
@@ -54,6 +60,8 @@ public class RightUI extends GridPane {
         add(inventory, 0, 2, 3, 1);
         healthLabel.setText(Integer.toString(player.getHealth()));
         healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
+        attackLabel.setText(Integer.toString(player.getAttack()));
+        attackLabel.textProperty().bind(Bindings.convert(player.getAttackProperty()));
         pickUpButton.setFocusTraversable(false);
         add(mainLootGrid, 0, 14, 2, 1);
 
@@ -61,11 +69,6 @@ public class RightUI extends GridPane {
 
     public UIInventory getInventory() {
         return inventory;
-    }
-
-    public void setAttackLabel() {
-        attackLabel.setText("" + player.getAttack());
-
     }
 
     public void showPickButton() {
@@ -84,24 +87,25 @@ public class RightUI extends GridPane {
                 if (cell.isItemOnCell()) {
                     player.pickUpItem(cell.getItem());
                     cell.setItem(null);
-//                    setAttackLabel();
                 }
-                setAttackLabel();
                 hideButton();
             }
         });
     }
 
-    public void drawChestLoot(Cell cell) {
-        for (int i = 0; i < ((Chest) cell.getMapObject()).getItemsInChest().size(); i++) {
-            this.canvas = new Canvas(Tiles.TILE_WIDTH * 2 + 4, Tiles.TILE_WIDTH * 2 + 4);
-            this.context = canvas.getGraphicsContext2D();
-
-            Tiles.drawWTileWithMargin(context, ((Chest) cell.getMapObject()).getItemsInChest().get(i), 0, 0);
-
-            lootPlaceGrid.add(canvas, i, 0);
+    public void drawLoot(Cell cell) {
+        int counter = 0;
+        for (int j = 0; j < cell.getMapObjects().size(); j++) {
+            for (int i = 0; i < ((Lootable) cell.getMapObjects().get(j)).getLootItems().size(); i++) {
+                this.canvas = new Canvas(Tiles.TILE_WIDTH + 4, Tiles.TILE_WIDTH + 4);
+                this.context = canvas.getGraphicsContext2D();
+                Tiles.drawTile(context, ((Lootable) cell.getMapObjects().get(j)).getLootItems().get(i), 0, 0);
+                lootPlaceGrid.add(canvas, counter, 0);
+                counter += 1;
+            }
         }
         mainLootGrid.add(lootPlaceGrid, 0, 0);
+
     }
 
     public void clearLootGrids() {
@@ -113,34 +117,23 @@ public class RightUI extends GridPane {
 //        for (int i = 0; i < 4; i++) {
 //            for (int j = 0; j < 4; j++) {
 //                Tiles.drawWTileWithMargin(context1, CellType.valueOf("FLOOR"), j, i);
-//
 //            }
-//
 //        }
 //        lootPlaceGrid.add(canvas, 1, 1);
 //        getChildren().remove(lootPlaceGrid);
 //    }
 
     public void addGridEvent(Cell cell) {
-
+        final int[] counter = {0};
         lootPlaceGrid.getChildren().forEach(item -> {
-            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
-                    if (event.getClickCount() == 1) {
-
-                        for (int i = 0; i < mainLootGrid.getChildren().size(); i++) {
-                            if (mainLootGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode()) == ((Chest) cell.getMapObject()).getItemsInChest().indexOf(i)) {
-                                player.pickUpItem(((Chest) cell.getMapObject()).getItemsInChest().get(clickedLoot));
-                                lootPlaceGrid.getChildren().remove(clickedLoot);
-                            }
-                        }
-                        ((Chest) cell.getMapObject()).removeItem(clickedLoot);
-                    }
-
-                }
+            item.setOnMouseClicked(event -> {
+                int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
+                player.pickUpItem(((Lootable) cell.getMapObjects().get(counter[0] - 1)).getLootItems().get(clickedLoot));
+                lootPlaceGrid.getChildren().remove(clickedLoot);
+                ((Lootable) cell.getMapObjects().get(counter[0] - 1)).removeItem(clickedLoot);
             });
+            System.out.println(counter[0]);
+            counter[0] += 1;
         });
     }
 }

@@ -3,19 +3,17 @@ package com.codecool.dungeoncrawl.logic.mapObjects;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Chest extends MapObject implements Lootable {
     private boolean open;
-    private Item item;
-    private List<Item> itemsInChest;
+    private List<Item> lootItems;
 
     public Chest(Cell cell) {
         super(cell);
         open = false;
-        itemsInChest = drawItem();
-
-
+        lootItems=drawItem();
     }
 
     public String getTileName() {
@@ -24,11 +22,6 @@ public class Chest extends MapObject implements Lootable {
         } else {
             return "closedChest";
         }
-
-    }
-
-    public List<Item> getItemsInChest() {
-        return itemsInChest;
     }
 
     public boolean isOpen() {
@@ -39,15 +32,18 @@ public class Chest extends MapObject implements Lootable {
         open = true;
     }
 
-    public Item getItem() {
-        return item;
+    @Override
+    public List<Item> getLootItems() {
+        return lootItems;
     }
 
-    public void removeItem(int i) {
-        itemsInChest.remove(i);
-    }
-
+    @Override
     public boolean isNotEmpty() {
-        return itemsInChest != null;
+        return lootItems != null;
+    }
+
+    @Override
+    public void removeItem(int i) {
+        lootItems.remove(i);
     }
 }
