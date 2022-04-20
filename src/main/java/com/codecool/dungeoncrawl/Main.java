@@ -6,7 +6,8 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
+import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
+import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main extends Application {
     private List<GameMap> savedMaps;
@@ -59,8 +61,6 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-//        rightUI.setHealthLabel();
-        rightUI.setAttackLabel();
         rightUI.hideButton();
 
         primaryStage.setTitle("Fabulous Octopus");
@@ -116,16 +116,13 @@ public class Main extends Application {
         if (map.getPlayer().getCell().isItemOnCell()) {
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
-        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest) map.getPlayer().getCell().getMapObject()).isNotEmpty()) {
-            rightUI.drawChestLoot(map.getPlayer().getCell());
+        } else if (map.getPlayer().getCell().isMapObjectOnCell()) {
+            rightUI.drawLoot(map.getPlayer().getCell());
             rightUI.addGridEvent(map.getPlayer().getCell());
         }
     }
 
     public void refresh() {
-//        monstersMove();
-        rightUI.setAttackLabel();
-
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -138,7 +135,7 @@ public class Main extends Application {
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isMapObjectOnCell()) {
-                    Tiles.drawTile(context, cell.getMapObject(), x - map.getXOffset(), y - map.getYOffset());
+                    Tiles.drawTile(context, cell.getMapObjects().get(0), x - map.getXOffset(), y - map.getYOffset());
                 } else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }

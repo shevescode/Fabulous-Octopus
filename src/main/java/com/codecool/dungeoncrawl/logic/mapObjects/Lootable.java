@@ -11,26 +11,32 @@ import java.util.Random;
 
 public interface Lootable {
 
+
+    List<Item> getLootItems();
+
+    boolean isNotEmpty();
+
+    void removeItem(int i);
+
+
     default List<Item> drawItem() {
-        List<Item> itemsInChest = new ArrayList<>();
+        List<Item> lootItems = new ArrayList<>();
         int numberOfItems = new Random().nextInt(0, 3);
         System.out.println(numberOfItems);
         for (int x = 0; x < numberOfItems; x++) {
             int randomInt = new Random().nextInt(0, 3);
             switch (randomInt) {
                 case 0 -> {
-                    itemsInChest.add(new HealthPotion());
+                    lootItems.add(new HealthPotion());
                 }
                 case 1 -> {
-                    itemsInChest.add(new Sword());
+                    lootItems.add(new Sword());
                 }
                 case 2 -> {
-                    itemsInChest.add(new Hammer());
+                    lootItems.add(new Hammer());
                 }
-
             }
-
         }
-        return itemsInChest;
+        return lootItems;
     }
 }

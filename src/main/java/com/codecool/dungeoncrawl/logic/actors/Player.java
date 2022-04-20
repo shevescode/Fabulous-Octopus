@@ -4,7 +4,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
-import javafx.beans.value.ObservableValue;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Player extends Actor {
                     }
                 }
                 case CHEST -> {
-                    if (((Chest) nextCell.getMapObject()).isOpen()) {
+                    if (((Chest) nextCell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).isOpen() ) {
                         moveToNextCell(nextCell);
                     } else if (hasChestKey()) {
                         openChest(nextCell);
@@ -76,7 +75,7 @@ public class Player extends Actor {
 
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
-        ((Chest) cell.getMapObject()).openChest();
+        ((Chest) cell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).openChest();
 
     }
 
