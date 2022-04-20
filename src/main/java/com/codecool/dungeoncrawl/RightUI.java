@@ -125,6 +125,7 @@ public class RightUI extends GridPane {
 
     public void addGridEvent(Cell cell) {
         final int[] counter = {0};
+        System.out.println("little change");
         lootPlaceGrid.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
