@@ -48,7 +48,7 @@ public class Player extends Actor {
     }
 
     public void pickUpItem(Item item) {
-        if (item instanceof Sword || item instanceof Hammer) {
+        if (item instanceof Weapon) {
             addAttackPoints(item);
         } else if (item instanceof  HealthPotion) {
             addHealthPoints(item);
@@ -88,11 +88,12 @@ public class Player extends Actor {
     }
 
     private void addAttackPoints(Item chestItem) {
-        if (chestItem instanceof Sword) {
-            setAttack(getAttack() + ((Sword) chestItem).getDamage());
-        } else if (chestItem instanceof Hammer) {
-            setAttack(getAttack() + ((Hammer) chestItem).getDamage());
-        }
+        setAttack(getAttack() + ((Weapon) chestItem).getDamage());
+//        if (chestItem instanceof Sword) {
+//            setAttack(getAttack() + ((Weapon) chestItem).getDamage());
+//        } else if (chestItem instanceof Hammer) {
+//            setAttack(getAttack() + ((Hammer) chestItem).getDamage());
+//        }
 
 
 }
