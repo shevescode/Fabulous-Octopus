@@ -16,10 +16,6 @@ public class Sword extends Item implements Weapon{
         return "sword";
     }
 
-//    public int getDamage() {
-//        return damage;
-//    }
-
 
     @Override
     public int getDamage() {

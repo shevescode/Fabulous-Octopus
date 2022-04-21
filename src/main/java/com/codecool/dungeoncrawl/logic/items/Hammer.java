@@ -17,10 +17,6 @@ public class Hammer extends Item implements Weapon {
         return "hammer";
     }
 
-//    public int getDamage() {
-//        return damage;
-//    }
-
     @Override
     public int getDamage() {
         return damage;

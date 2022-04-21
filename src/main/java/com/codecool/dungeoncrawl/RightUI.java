@@ -4,7 +4,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
-import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,15 +12,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import javafx.scene.paint.Color;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class RightUI extends GridPane {
@@ -42,7 +38,7 @@ public class RightUI extends GridPane {
     public RightUI(Player player) {
         super();
 
-
+        this.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         this.player = player;
         this.healthLabel = new Label();
         this.attackLabel = new Label();
@@ -61,6 +57,7 @@ public class RightUI extends GridPane {
         add(pickUpButton, 2, 0);
         this.inventory = new UIInventory();
         add(inventory, 0, 2, 3, 1);
+
         healthLabel.setText(Integer.toString(player.getHealth()));
         healthLabel.textProperty().bind(Bindings.convert(player.getHealthProperty()));
         attackLabel.setText(Integer.toString(player.getAttack()));
@@ -100,8 +97,11 @@ public class RightUI extends GridPane {
         int counter = 0;
         for (int j = 0; j < cell.getMapObjects().size(); j++) {
             for (int i = 0; i < ((Lootable) cell.getMapObjects().get(j)).getLootItems().size(); i++) {
-                this.canvas = new Canvas(Tiles.TILE_WIDTH + 4, Tiles.TILE_WIDTH + 4);
+                this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
                 this.context = canvas.getGraphicsContext2D();
+
+//                context.setFill(Color.BLACK);
+//                context.fillRect(0, 0, canvas.getWidth()*2, canvas.getHeight()*2);
                 Tiles.drawTile(context, ((Lootable) cell.getMapObjects().get(j)).getLootItems().get(i), 0, 0);
                 lootPlaceGrid.add(canvas, counter, 0);
                 counter += 1;

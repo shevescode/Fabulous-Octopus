@@ -10,8 +10,7 @@ import java.util.List;
 
 public class Player extends Actor {
     private List<Item> inventory;
-//    private UIInventory uiInventory;
-    private RightUI rightUI;
+      private RightUI rightUI;
 
     public Player(Cell cell) {
         super(cell);
@@ -63,6 +62,19 @@ public class Player extends Actor {
         this.inventory = inventory;
     }
 
+    public void setRightUI(RightUI rightUI) {
+        this.rightUI = rightUI;
+    }
+
+    public void removeKey(Class<?> keyType) {
+        Item key = inventory.stream()
+                .filter(keyType::isInstance)
+                .findAny()
+                .orElse(null);
+        inventory.remove(key);
+        rightUI.getInventory().removeCanvasItemFromInv(key);
+    }
+
     private boolean hasDoorKey() {
         return inventory.stream().anyMatch(Item -> (Item instanceof DoorKey));
     }
@@ -79,31 +91,14 @@ public class Player extends Actor {
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
         ((Chest) cell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).openChest();
-
-    }
-
-    public void removeKey(Class<?> keyType) {
-        Item key = inventory.stream()
-                .filter(keyType::isInstance)
-                .findAny()
-                .orElse(null);
-        inventory.remove(key);
-//        uiInventory.checkKeyInInv(key);
-        rightUI.getInventory().removeCanvasItemFromInv(key);
     }
 
     private void addAttackPoints(Item chestItem) {
         setAttack(getAttack() + ((Weapon) chestItem).getDamage());
-
-
     }
-
 
     private void addHealthPoints(Item chestItem) {
         setHealth(getHealth() + ((HealthPotion) chestItem).getHealth());
     }
 
-    public void setRightUI(RightUI rightUI) {
-        this.rightUI = rightUI;
-    }
 }
