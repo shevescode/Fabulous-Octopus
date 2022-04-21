@@ -17,6 +17,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+
+import java.math.BigInteger;
 import java.util.List;
 
 
@@ -127,25 +129,15 @@ public class RightUI extends GridPane {
 //    }
 
     public void addGridEvent(Cell cell) {
-        final int[] counter = {0};
-//        System.out.println("little change");
-//        List<MapObject> list = cell.getMapObjects()
-//                .stream()
-//                .toList();
-//
         List<Item> itemList = cell.getAllItemsOnCell();
 
         lootPlaceGrid.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 int clickedLoot = lootPlaceGrid.getChildren().indexOf(event.getPickResult().getIntersectedNode());
-
-                player.pickUpItem(itemList.get(counter[0] - 1));
-
+                cell.removeItemFromCell(itemList.get(clickedLoot));
+                player.pickUpItem(itemList.get(clickedLoot));
                 lootPlaceGrid.getChildren().remove(clickedLoot);
-//TODO: problem z dodwaniem itemów do EQ przy dwóch lootach -> np.ze skrzynki dodaje się dwa razy ten sam przedmiot przy dwóch różnych wylosowanych przedmiotach
-                cell.removeItemFromCell(itemList.get(counter[0] - 1));
             });
-            counter[0] += 1;
         });
     }
 }

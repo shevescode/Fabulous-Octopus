@@ -8,6 +8,8 @@ import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.reverse;
+
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
