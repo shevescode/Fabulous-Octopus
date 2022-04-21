@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.RightUI;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class Player extends Actor {
     private List<Item> inventory;
+//    private UIInventory uiInventory;
+    private RightUI rightUI;
 
     public Player(Cell cell) {
         super(cell);
@@ -26,7 +29,7 @@ public class Player extends Actor {
                     }
                 }
                 case CHEST -> {
-                    if (((Chest) nextCell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).isOpen() ) {
+                    if (((Chest) nextCell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).isOpen()) {
                         moveToNextCell(nextCell);
                     } else if (hasChestKey()) {
                         openChest(nextCell);
@@ -50,7 +53,7 @@ public class Player extends Actor {
     public void pickUpItem(Item item) {
         if (item instanceof Weapon) {
             addAttackPoints(item);
-        } else if (item instanceof  HealthPotion) {
+        } else if (item instanceof HealthPotion) {
             addHealthPoints(item);
         }
         inventory.add(item);
@@ -85,22 +88,22 @@ public class Player extends Actor {
                 .findAny()
                 .orElse(null);
         inventory.remove(key);
+//        uiInventory.checkKeyInInv(key);
+        rightUI.getInventory().removeCanvasItemFromInv(key);
     }
 
     private void addAttackPoints(Item chestItem) {
         setAttack(getAttack() + ((Weapon) chestItem).getDamage());
-//        if (chestItem instanceof Sword) {
-//            setAttack(getAttack() + ((Weapon) chestItem).getDamage());
-//        } else if (chestItem instanceof Hammer) {
-//            setAttack(getAttack() + ((Hammer) chestItem).getDamage());
-//        }
 
 
-}
+    }
+
 
     private void addHealthPoints(Item chestItem) {
         setHealth(getHealth() + ((HealthPotion) chestItem).getHealth());
     }
 
-
+    public void setRightUI(RightUI rightUI) {
+        this.rightUI = rightUI;
+    }
 }

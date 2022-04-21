@@ -48,9 +48,12 @@ public class Main extends Application {
 
         map = MapLoader.loadMap("/map.txt");
         player = new Player(map.getFirstPlayerCell());
+
         map.setPlayer(player);
         rightUI = new RightUI(map.getPlayer());
         rightUI.getInventory().setPlayer(player);
+        player.setRightUI(rightUI);
+
         map.getPlayer().setInventory(rightUI.getInventory().getItems());
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
