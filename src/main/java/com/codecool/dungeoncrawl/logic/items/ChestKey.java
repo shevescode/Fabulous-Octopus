@@ -8,6 +8,10 @@ public class ChestKey extends Item {
         super(cell);
     }
 
+    public ChestKey() {
+
+    }
+
     public String getTileName() {
         return "chest key";
     }

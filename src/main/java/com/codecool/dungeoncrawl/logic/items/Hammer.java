@@ -2,7 +2,7 @@ package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 
-public class Hammer extends Item {
+public class Hammer extends Item implements Weapon {
     private final int damage = 5;
 
     public Hammer(Cell cell) {
@@ -17,6 +17,7 @@ public class Hammer extends Item {
         return "hammer";
     }
 
+    @Override
     public int getDamage() {
         return damage;
     }

@@ -2,13 +2,19 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
 import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.reverse;
 
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private Item item;
-    private MapObject mapObject;
+    private List<MapObject> mapObjects = new ArrayList<>();
     private final GameMap gameMap;
     private final int x;
     private final int y;
@@ -41,12 +47,12 @@ public class Cell implements Drawable {
         return item;
     }
 
-    public MapObject getMapObject() {
-        return mapObject;
+    public List<MapObject> getMapObjects() {
+        return mapObjects;
     }
 
-    public void setMapObject(MapObject mapObject) {
-        this.mapObject = mapObject;
+    public void addMapObject(MapObject mapObject) {
+        this.mapObjects.add(mapObject);
     }
 
     public void setItem(Item item) {
@@ -62,6 +68,24 @@ public class Cell implements Drawable {
             return null;
         }
 
+    }
+
+    public List<Item> getAllItemsOnCell() {
+        List<Item> itemList = new ArrayList<>();
+        for (MapObject mapObject:mapObjects) {
+            itemList.addAll(((Lootable) mapObject).getLootItems());
+        }
+        return itemList;
+    }
+
+    public void removeItemFromCell(Item item) {
+        try {
+            for (MapObject mapObject : mapObjects) {
+                ((Lootable) mapObject).getLootItems().remove(item);
+            }
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override
@@ -89,7 +113,7 @@ public class Cell implements Drawable {
         return getItem() != null;
     }
     public boolean isMapObjectOnCell() {
-        return getMapObject() != null;
+        return getMapObjects().size() != 0;
     }
 
     public boolean isNextCellOnMap(Cell cell) {

@@ -6,7 +6,6 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -22,8 +21,11 @@ import java.util.List;
 public class Main extends Application {
     private List<GameMap> savedMaps;
     private GameMap map;
-    private GameMap mapLevelZeroSave;
-    private GameMap mapLevelOneSave;
+    private GameMap levelZeroSave;
+    private GameMap levelFirstSave;
+    private GameMap levelSecondSave;
+    private GameMap levelThirdSave;
+
     private MoveMonsters monsterMove;
     private Player player;
     private int gameLevel = 0;
@@ -44,23 +46,25 @@ public class Main extends Application {
                 20 * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
 
-        map = MapLoader.loadMap("/map.txt");
+        map = MapLoader.loadMap("/newMap1.txt");
         player = new Player(map.getFirstPlayerCell());
+
         map.setPlayer(player);
         rightUI = new RightUI(map.getPlayer());
+        rightUI.getInventory().setPlayer(player);
+        player.setRightUI(rightUI);
+
         map.getPlayer().setInventory(rightUI.getInventory().getItems());
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
 
         savedMaps = new ArrayList<>();
-        savedMaps.add(mapLevelZeroSave);
-        savedMaps.add(mapLevelOneSave);
+        savedMaps.add(levelZeroSave);
+        savedMaps.add(levelFirstSave);
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-//        rightUI.setHealthLabel();
-        rightUI.setAttackLabel();
         rightUI.hideButton();
 
         primaryStage.setTitle("Fabulous Octopus");
@@ -112,20 +116,20 @@ public class Main extends Application {
                 map.incrementXOffset();
                 refresh();
             }
+            case C -> {
+                player.setCheat();
+            }
         }
         if (map.getPlayer().getCell().isItemOnCell()) {
             rightUI.showPickButton();
             rightUI.buttonOnClick(map.getPlayer().getCell());
-        } else if (isPlayerStandingOnChest() && map.getPlayer().getCell().isMapObjectOnCell() && ((Chest) map.getPlayer().getCell().getMapObject()).isNotEmpty()) {
-            rightUI.drawChestLoot(map.getPlayer().getCell());
+        } else if (map.getPlayer().getCell().isMapObjectOnCell()) {
+            rightUI.drawLoot(map.getPlayer().getCell());
             rightUI.addGridEvent(map.getPlayer().getCell());
         }
     }
 
     public void refresh() {
-//        monstersMove();
-        rightUI.setAttackLabel();
-
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -138,7 +142,7 @@ public class Main extends Application {
                 } else if (cell.isItemOnCell()) {
                     Tiles.drawTile(context, cell.getItem(), x - map.getXOffset(), y - map.getYOffset());
                 } else if (cell.isMapObjectOnCell()) {
-                    Tiles.drawTile(context, cell.getMapObject(), x - map.getXOffset(), y - map.getYOffset());
+                    Tiles.drawTile(context, cell.getMapObjects().get(0), x - map.getXOffset(), y - map.getYOffset());
                 } else {
                     Tiles.drawTile(context, cell, x - map.getXOffset(), y - map.getYOffset());
                 }
@@ -171,32 +175,81 @@ public class Main extends Application {
 
 
     private void changeMap(int i) {
+        int previousLevel = gameLevel;
         gameLevel += i;
+
         switch (gameLevel) {
             case 0 -> {
-                mapLevelOneSave = map;
-                mapLevelOneSave.getPlayer().getCell().setActor(null);
-                mapLevelOneSave.setPlayer(null);
-                map = mapLevelZeroSave;
+                levelFirstSave = map;
+                levelFirstSave.getPlayer().getCell().setActor(null);
+                levelFirstSave.setPlayer(null);
+                map = levelZeroSave;
                 monsterMove.setMap(map);
-                player.setCell(map.getCell(20, 15));
-                map.getCell(20, 15).setActor(player);
+                player.setCell(map.getCell(19, 2));
+                map.getCell(19, 2).setActor(player);
                 map.setPlayer(player);
             }
             case 1 -> {
-                mapLevelZeroSave = map;
-                mapLevelZeroSave.getPlayer().getCell().setActor(null);
-                mapLevelZeroSave.setPlayer(null);
-
-                if (mapLevelOneSave == null) {
-                    mapLevelOneSave = MapLoader.loadMap("/level2.txt");
+                if (levelFirstSave == null) {
+                    levelFirstSave = MapLoader.loadMap("/newMap2.txt");
                 }
-                map = mapLevelOneSave;
+                if (previousLevel == 0) {
+                    levelZeroSave = map;
+                    levelZeroSave.getPlayer().getCell().setActor(null);
+                    levelZeroSave.setPlayer(null);
+                    player.setCell(levelFirstSave.getFirstPlayerCell());
+                    levelFirstSave.getFirstPlayerCell().setActor(player);
+                    levelFirstSave.setPlayer(player);
+                } else {
+                    levelSecondSave = map;
+                    levelSecondSave.getPlayer().getCell().setActor(null);
+                    levelSecondSave.setPlayer(null);
+                    player.setCell(levelFirstSave.getCell(4, 17));
+                    levelFirstSave.getCell(4, 17).setActor(player);
+                    levelFirstSave.setPlayer(player);
+                }
+
+                map = levelFirstSave;
                 monsterMove.setMap(map);
-                player.setCell(map.getFirstPlayerCell());
-                map.getFirstPlayerCell().setActor(player);
-                map.setPlayer(player);
+
             }
+            case 2 -> {
+                if (levelSecondSave == null) {
+                    levelSecondSave = MapLoader.loadMap("/newMap3.txt");
+                }
+                if (previousLevel == 1) {
+                    levelFirstSave = map;
+                    levelFirstSave.getPlayer().getCell().setActor(null);
+                    levelFirstSave.setPlayer(null);
+                    player.setCell(levelSecondSave.getFirstPlayerCell());
+                    levelSecondSave.getFirstPlayerCell().setActor(player);
+                    levelSecondSave.setPlayer(player);
+                } else {
+                    levelThirdSave = map;
+                    levelThirdSave.getPlayer().getCell().setActor(null);
+                    levelThirdSave.setPlayer(null);
+                    player.setCell(levelSecondSave.getCell(1, 25));
+                    levelSecondSave.getCell(1, 25).setActor(player);
+                    levelSecondSave.setPlayer(player);
+                }
+
+                map = levelSecondSave;
+                monsterMove.setMap(map);
+            }
+            case 3 -> {
+                if (levelThirdSave == null) {
+                    levelThirdSave = MapLoader.loadMap("/newMap4.txt");
+                }
+                levelSecondSave = map;
+                levelSecondSave.getPlayer().getCell().setActor(null);
+                levelSecondSave.setPlayer(null);
+                player.setCell(levelThirdSave.getFirstPlayerCell());
+                levelThirdSave.getFirstPlayerCell().setActor(player);
+                levelThirdSave.setPlayer(player);
+                map = levelThirdSave;
+                monsterMove.setMap(map);
+            }
+
         }
 
         refresh();

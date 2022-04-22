@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.Tiles;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.mapObjects.DeadBody;
@@ -11,12 +12,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Actor implements Drawable {
     private Cell cell;
     private SimpleIntegerProperty health;
-    private int attack;
+    private SimpleIntegerProperty attack;
 
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
         health = new SimpleIntegerProperty(this, "health");
+        attack = new SimpleIntegerProperty(this,"attack");
     }
 
     public int getHealth() {
@@ -36,13 +38,13 @@ public abstract class Actor implements Drawable {
     }
 
     public int getAttack() {
-        return attack;
+        return attack.get();
     }
 
     public void killActor() {
         health.set(0);
         cell.setActor(null);
-        cell.setMapObject(new DeadBody(cell));
+        cell.addMapObject(new DeadBody(this));
         cell = null;
 
     }
@@ -74,7 +76,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void setAttack(int attack) {
-        this.attack = attack;
+        this.attack.set(attack);
     }
 
     public void combat(Actor actor) {
@@ -104,5 +106,8 @@ public abstract class Actor implements Drawable {
         return health;
     }
 
+    public ObservableValue<?> getAttackProperty() {
+        return attack;
+    }
 
 }

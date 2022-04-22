@@ -1,18 +1,22 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.RightUI;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.mapObjects.Chest;
-import javafx.beans.value.ObservableValue;
 
 import java.util.List;
 
 public class Player extends Actor {
     private List<Item> inventory;
+      private RightUI rightUI;
+
+      private boolean cheat;
 
     public Player(Cell cell) {
         super(cell);
+        cheat = false;
         setHealth(30);
         setAttack(5);
     }
@@ -27,7 +31,7 @@ public class Player extends Actor {
                     }
                 }
                 case CHEST -> {
-                    if (((Chest) nextCell.getMapObject()).isOpen()) {
+                    if (((Chest) nextCell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).isOpen()) {
                         moveToNextCell(nextCell);
                     } else if (hasChestKey()) {
                         openChest(nextCell);
@@ -40,6 +44,16 @@ public class Player extends Actor {
                         moveToNextCell(nextCell);
                     }
                 }
+                case WALL, EMPTY -> {
+                    if(cheat) {
+                        if (nextCell.isActorOnCell()) {
+                            this.combat(nextCell.getActor());
+                        } else {
+                            moveToNextCell(nextCell);
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -49,9 +63,9 @@ public class Player extends Actor {
     }
 
     public void pickUpItem(Item item) {
-        if (item instanceof Sword || item instanceof Hammer) {
+        if (item instanceof Weapon) {
             addAttackPoints(item);
-        } else if (item instanceof  HealthPotion) {
+        } else if (item instanceof HealthPotion) {
             addHealthPoints(item);
         }
         inventory.add(item);
@@ -59,6 +73,23 @@ public class Player extends Actor {
 
     public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
+    }
+
+    public void setRightUI(RightUI rightUI) {
+        this.rightUI = rightUI;
+    }
+
+    public void removeKey(Class<?> keyType) {
+        Item key = inventory.stream()
+                .filter(keyType::isInstance)
+                .findAny()
+                .orElse(null);
+        inventory.remove(key);
+        rightUI.getInventory().removeCanvasItemFromInv(key);
+    }
+
+    public void setCheat() {
+        cheat = !cheat;
     }
 
     private boolean hasDoorKey() {
@@ -76,31 +107,15 @@ public class Player extends Actor {
 
     private void openChest(Cell cell) {
         removeKey(ChestKey.class);
-        ((Chest) cell.getMapObject()).openChest();
-
-    }
-
-    public void removeKey(Class<?> keyType) {
-        Item key = inventory.stream()
-                .filter(keyType::isInstance)
-                .findAny()
-                .orElse(null);
-        inventory.remove(key);
+        ((Chest) cell.getMapObjects().stream().filter(Item -> Item instanceof Chest).findAny().get()).openChest();
     }
 
     private void addAttackPoints(Item chestItem) {
-        if (chestItem instanceof Sword) {
-            setAttack(getAttack() + ((Sword) chestItem).getDamage());
-        } else if (chestItem instanceof Hammer) {
-            setAttack(getAttack() + ((Hammer) chestItem).getDamage());
-        }
-
-
-}
+        setAttack(getAttack() + ((Weapon) chestItem).getDamage());
+    }
 
     private void addHealthPoints(Item chestItem) {
         setHealth(getHealth() + ((HealthPotion) chestItem).getHealth());
     }
-
 
 }

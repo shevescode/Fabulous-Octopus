@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
+import javafx.scene.paint.Paint;
+
 public enum CellType implements Drawable {
     EMPTY("empty"),
     FLOOR("floor"),
