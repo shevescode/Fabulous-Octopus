@@ -48,7 +48,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.3</version>
         <configuration>
-          <mainClass>com.codecool.dungeoncrawl.Main</mainClass>
+          <mainClass>com.codecool.dungeoncrawl.Game</mainClass>
         </configuration>
       </plugin>
 

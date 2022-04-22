@@ -7,9 +7,9 @@ import javafx.application.Platform;
 
 public class MoveMonsters implements Runnable {
     private GameMap map;
-    private Main main;
+    private Game main;
 
-    public MoveMonsters(GameMap map, Main main) {
+    public MoveMonsters(GameMap map, Game main) {
         this.map = map;
         this.main = main;
     }

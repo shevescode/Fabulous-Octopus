@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-import java.math.BigInteger;
 import java.util.List;
 
 
@@ -114,16 +113,6 @@ public class RightUI extends GridPane {
         lootPlaceGrid.getChildren().clear();
         mainLootGrid.getChildren().clear();
     }
-
-//    public void drawLootPlace() {
-//        for (int i = 0; i < 4; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                Tiles.drawWTileWithMargin(context1, CellType.valueOf("FLOOR"), j, i);
-//            }
-//        }
-//        lootPlaceGrid.add(canvas, 1, 1);
-//        getChildren().remove(lootPlaceGrid);
-//    }
 
     public void addGridEvent(Cell cell) {
         List<Item> itemList = cell.getAllItemsOnCell();
