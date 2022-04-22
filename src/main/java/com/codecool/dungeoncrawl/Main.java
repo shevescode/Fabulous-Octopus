@@ -19,15 +19,26 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import static java.lang.Double.MAX_VALUE;
 import static javafx.application.Platform.exit;
 
@@ -63,7 +74,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)  {
 
         canvas = new Canvas(
                 25 * Tiles.TILE_WIDTH,
@@ -102,11 +113,10 @@ public class Main extends Application {
             primaryStage.show();
             sceneGame.setOnKeyPressed(this::onKeyPressed);
         } else {
+
             vbox.setPrefWidth(90);
             vbox.setPrefHeight(0);
-            for(int i=0; i<4;i++) {
-                Button startButton = new Button("START GAME");
-            }
+
             Button startButton = new Button("START GAME");
             Button optionButton = new Button("OPTIONS");
             Button exitButton = new Button("EXIT GAME");
@@ -117,7 +127,10 @@ public class Main extends Application {
             startButton.setPrefHeight(MAX_VALUE);
             optionButton.setPrefHeight(MAX_VALUE);
             exitButton.setPrefHeight(MAX_VALUE);
-
+            Text text = new Text("FABULOUS OCTOPUS");
+            text.setFill(Color.WHITE);
+            text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+            vbox.getChildren().add(text);
             vbox.getChildren().addAll(startButton, optionButton, exitButton);
 
             Scene scene = new Scene(vbox);
@@ -130,7 +143,7 @@ public class Main extends Application {
 
                     System.out.println("kliknięty");
                     System.out.println(State);
-                   State = STATE.GAME;
+                    State = STATE.GAME;
                     start(primaryStage);
                 }
             });
@@ -138,10 +151,9 @@ public class Main extends Application {
                 @Override
                 public void handle(ActionEvent e) {
 
-                  exit();
+                    exit();
                 }
             });
-
 
 
         }
