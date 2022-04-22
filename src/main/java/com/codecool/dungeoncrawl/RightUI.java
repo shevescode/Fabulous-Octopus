@@ -137,6 +137,7 @@ public class RightUI extends GridPane {
                 cell.removeItemFromCell(itemList.get(clickedLoot));
                 player.pickUpItem(itemList.get(clickedLoot));
                 lootPlaceGrid.getChildren().remove(clickedLoot);
+                itemList.remove(clickedLoot);
             });
         });
     }

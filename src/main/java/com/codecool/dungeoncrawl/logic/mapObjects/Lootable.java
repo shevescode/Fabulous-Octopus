@@ -1,9 +1,6 @@
 package com.codecool.dungeoncrawl.logic.mapObjects;
 
-import com.codecool.dungeoncrawl.logic.items.Hammer;
-import com.codecool.dungeoncrawl.logic.items.HealthPotion;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +19,20 @@ public interface Lootable {
     default List<Item> drawItem() {
         List<Item> lootItems = new ArrayList<>();
         int numberOfItems = new Random().nextInt(0, 3);
-        System.out.println(numberOfItems);
         for (int x = 0; x < numberOfItems; x++) {
-            int randomInt = new Random().nextInt(0, 3);
+            int randomInt = new Random().nextInt(0, 6);
             switch (randomInt) {
-                case 0 -> {
+                case 0,4 -> {
                     lootItems.add(new HealthPotion());
                 }
-                case 1 -> {
+                case 1,5-> {
                     lootItems.add(new Sword());
                 }
                 case 2 -> {
                     lootItems.add(new Hammer());
+                }
+                case 3 -> {
+                    lootItems.add(new ChestKey());
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.Tiles;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.mapObjects.DeadBody;
@@ -43,7 +44,7 @@ public abstract class Actor implements Drawable {
     public void killActor() {
         health.set(0);
         cell.setActor(null);
-        cell.addMapObject(new DeadBody(cell));
+        cell.addMapObject(new DeadBody(this));
         cell = null;
 
     }

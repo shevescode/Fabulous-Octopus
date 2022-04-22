@@ -12,8 +12,11 @@ public class Player extends Actor {
     private List<Item> inventory;
       private RightUI rightUI;
 
+      private boolean cheat;
+
     public Player(Cell cell) {
         super(cell);
+        cheat = false;
         setHealth(30);
         setAttack(5);
     }
@@ -41,6 +44,16 @@ public class Player extends Actor {
                         moveToNextCell(nextCell);
                     }
                 }
+                case WALL, EMPTY -> {
+                    if(cheat) {
+                        if (nextCell.isActorOnCell()) {
+                            this.combat(nextCell.getActor());
+                        } else {
+                            moveToNextCell(nextCell);
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -73,6 +86,10 @@ public class Player extends Actor {
                 .orElse(null);
         inventory.remove(key);
         rightUI.getInventory().removeCanvasItemFromInv(key);
+    }
+
+    public void setCheat() {
+        cheat = !cheat;
     }
 
     private boolean hasDoorKey() {

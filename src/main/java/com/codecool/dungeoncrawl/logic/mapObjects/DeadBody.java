@@ -1,6 +1,8 @@
 package com.codecool.dungeoncrawl.logic.mapObjects;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Spider;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
 import java.util.List;
@@ -9,9 +11,12 @@ public class DeadBody extends MapObject implements Lootable {
 
     private List<Item> lootItems;
 
-    public DeadBody(Cell cell) {
-        super(cell);
-        lootItems = drawItem();
+    public DeadBody(Actor actor) {
+        super(actor.getCell());
+        if(!(actor instanceof Spider)) {
+            lootItems = drawItem();
+        }
+
     }
 
     @Override
