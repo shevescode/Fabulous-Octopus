@@ -9,17 +9,27 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.mapObjects.Lootable;
 import com.codecool.dungeoncrawl.logic.mapObjects.MapObject;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Double.MAX_VALUE;
+import static javafx.application.Platform.exit;
 
 public class Main extends Application {
     private List<GameMap> savedMaps;
@@ -34,6 +44,19 @@ public class Main extends Application {
 
     private Canvas canvas;
     private GraphicsContext context;
+    private BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB);
+
+
+    private enum STATE {
+        MENU,
+        GAME
+    }
+
+    private Menu menu;
+
+
+    private STATE State = STATE.MENU;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -41,6 +64,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         canvas = new Canvas(
                 25 * Tiles.TILE_WIDTH,
                 20 * Tiles.TILE_WIDTH);
@@ -59,17 +83,68 @@ public class Main extends Application {
         borderPane.setCenter(canvas);
         borderPane.setRight(rightUI);
 
+        menu = new Menu();
+        primaryStage.setTitle("Fabulous Octopus");
+        VBox vbox = new VBox();
+        vbox.setBackground(new Background(new BackgroundFill(Color.valueOf("#472D3C"), CornerRadii.EMPTY, Insets.EMPTY)));
+
         savedMaps = new ArrayList<>();
         savedMaps.add(mapLevelZeroSave);
         savedMaps.add(mapLevelOneSave);
-        Scene scene = new Scene(borderPane);
-        primaryStage.setScene(scene);
-        refresh();
-        rightUI.hideButton();
+        System.out.println(State);
+        Scene sceneGame = new Scene(borderPane);
+        if (State == STATE.GAME) {
 
-        primaryStage.setTitle("Fabulous Octopus");
-        primaryStage.show();
-        scene.setOnKeyPressed(this::onKeyPressed);
+            primaryStage.setScene(sceneGame);
+            refresh();
+            rightUI.hideButton();
+
+            primaryStage.show();
+            sceneGame.setOnKeyPressed(this::onKeyPressed);
+        } else {
+            vbox.setPrefWidth(90);
+            vbox.setPrefHeight(0);
+            for(int i=0; i<4;i++) {
+                Button startButton = new Button("START GAME");
+            }
+            Button startButton = new Button("START GAME");
+            Button optionButton = new Button("OPTIONS");
+            Button exitButton = new Button("EXIT GAME");
+
+            startButton.setPrefWidth(MAX_VALUE);
+            optionButton.setPrefWidth(MAX_VALUE);
+            exitButton.setPrefWidth(MAX_VALUE);
+            startButton.setPrefHeight(MAX_VALUE);
+            optionButton.setPrefHeight(MAX_VALUE);
+            exitButton.setPrefHeight(MAX_VALUE);
+
+            vbox.getChildren().addAll(startButton, optionButton, exitButton);
+
+            Scene scene = new Scene(vbox);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+            startButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+
+                    System.out.println("kliknięty");
+                    System.out.println(State);
+                   State = STATE.GAME;
+                    start(primaryStage);
+                }
+            });
+            exitButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+
+                  exit();
+                }
+            });
+
+
+
+        }
 
 
 //        Runnable r = () -> {

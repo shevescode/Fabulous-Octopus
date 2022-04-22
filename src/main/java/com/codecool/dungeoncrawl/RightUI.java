@@ -12,10 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.math.BigInteger;
@@ -46,7 +43,6 @@ public class RightUI extends GridPane {
         this.attackLabel = new Label();
 
         this.pickUpButton = new Button("Pick up item");
-
         this.mainLootGrid = new GridPane();
         this.lootPlaceGrid = new GridPane();
 
@@ -65,6 +61,7 @@ public class RightUI extends GridPane {
         attackLabel.setText(Integer.toString(player.getAttack()));
         attackLabel.textProperty().bind(Bindings.convert(player.getAttackProperty()));
         pickUpButton.setFocusTraversable(false);
+//        lootLayout();
         add(mainLootGrid, 0, 14, 2, 1);
 
     }
@@ -140,4 +137,16 @@ public class RightUI extends GridPane {
             });
         });
     }
+
+
+//    private void lootLayout() {
+//        mainLootGrid.setPrefSize(4 * Tiles.TILE_WIDTH, 100);
+//        mainLootGrid.setMargin(this, new Insets(100, 0, 0, 0));
+//        mainLootGrid.setPadding(new Insets(5));
+//        mainLootGrid.setBorder(new Border(new BorderStroke(Color.BLACK,
+//                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+//
+//        mainLootGrid.setBackground(new Background(new BackgroundFill(Color.valueOf("#472D3C"), CornerRadii.EMPTY, Insets.EMPTY)));
+//    }
+
 }
