@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 
 import javafx.scene.text.Font;
 
+import javax.swing.*;
+
 import static java.lang.Double.MAX_VALUE;
 import static javafx.application.Platform.exit;
 
@@ -51,8 +53,6 @@ public class Main extends Application {
 
         buttonsEvent(exitButton);
         buttonsEvent(startButton);
-//        primaryStage.close();
-
 
     }
 
@@ -66,6 +66,7 @@ public class Main extends Application {
                     game.windowGame("Fabulous Octopus");
 
                 }
+
             }
         });
     }

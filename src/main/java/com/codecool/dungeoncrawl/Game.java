@@ -35,9 +35,10 @@ public class Game {
     private Canvas canvas;
     private GraphicsContext context;
 
-    Stage primaryStage = new Stage();
+
 
     public void windowGame(String title) {
+        Stage primaryStage = new Stage();
         primaryStage.setTitle(title);
         canvas = new Canvas(
                 25 * Tiles.TILE_WIDTH,
