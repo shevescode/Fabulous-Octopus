@@ -253,10 +253,6 @@ public class Game {
         return map.getPlayer().getCell().getType() == CellType.STAIRS_UP;
     }
 
-    private boolean isPlayerStandingOnChest() {
-        return map.getPlayer().getCell().getType() == CellType.CHEST;
-    }
-
     private void monstersMove() {
         for (Monster monster : map.getAllMonsters()) {
             monster.monsterMakeMove();

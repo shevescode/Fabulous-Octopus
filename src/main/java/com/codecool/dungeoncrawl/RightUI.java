@@ -60,8 +60,8 @@ public class RightUI extends GridPane {
         attackLabel.setText(Integer.toString(player.getAttack()));
         attackLabel.textProperty().bind(Bindings.convert(player.getAttackProperty()));
         pickUpButton.setFocusTraversable(false);
-//        lootLayout();
-        add(mainLootGrid, 0, 14, 2, 1);
+        lootLayout();
+        add(mainLootGrid, 0, 14, 3, 1);
 
     }
 
@@ -98,8 +98,6 @@ public class RightUI extends GridPane {
                 this.canvas = new Canvas(Tiles.TILE_WIDTH, Tiles.TILE_WIDTH);
                 this.context = canvas.getGraphicsContext2D();
 
-//                context.setFill(Color.BLACK);
-//                context.fillRect(0, 0, canvas.getWidth()*2, canvas.getHeight()*2);
                 Tiles.drawTile(context, ((Lootable) cell.getMapObjects().get(j)).getLootItems().get(i), 0, 0);
                 lootPlaceGrid.add(canvas, counter, 0);
                 counter += 1;
@@ -128,14 +126,12 @@ public class RightUI extends GridPane {
     }
 
 
-//    private void lootLayout() {
-//        mainLootGrid.setPrefSize(4 * Tiles.TILE_WIDTH, 100);
-//        mainLootGrid.setMargin(this, new Insets(100, 0, 0, 0));
-//        mainLootGrid.setPadding(new Insets(5));
-//        mainLootGrid.setBorder(new Border(new BorderStroke(Color.BLACK,
-//                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
-//
-//        mainLootGrid.setBackground(new Background(new BackgroundFill(Color.valueOf("#472D3C"), CornerRadii.EMPTY, Insets.EMPTY)));
-//    }
+    private void lootLayout() {
+        mainLootGrid.setPrefSize(5 * Tiles.TILE_WIDTH, 100);
+        mainLootGrid.setPadding(new Insets(5));
+        mainLootGrid.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        mainLootGrid.setBackground(new Background(new BackgroundFill(Color.valueOf("#472D3C"), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
 
 }

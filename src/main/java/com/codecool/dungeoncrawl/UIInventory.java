@@ -70,7 +70,7 @@ public class UIInventory extends GridPane {
 
     private void inventoryLayout() {
         setPrefSize(5 * Tiles.TILE_WIDTH, 200);
-        setMargin(this, new Insets(10, 0, 0, 0));
+        setMargin(this, new Insets(10, 0, 50, 0));
         setPadding(new Insets(5));
         setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));

@@ -16,8 +16,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.text.Font;
 
-import javax.swing.*;
-
 import static java.lang.Double.MAX_VALUE;
 import static javafx.application.Platform.exit;
 
@@ -27,7 +25,7 @@ public class Main extends Application {
     private final Button exitButton;
     private final Button startButton;
     private final Button optionsButton;
-    private Pane vbox;
+    private final Pane vbox;
 
     public static void main(String[] args) {
         launch(args);
@@ -51,12 +49,12 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        buttonsEvent(exitButton);
-        buttonsEvent(startButton);
+        buttonsEvent(exitButton, primaryStage);
+        buttonsEvent(startButton, primaryStage);
 
     }
 
-    private void buttonsEvent(Button button) {
+    private void buttonsEvent(Button button, Stage primaryStage) {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -64,6 +62,7 @@ public class Main extends Application {
                     exit();
                 } else if (button.equals(startButton)) {
                     game.windowGame("Fabulous Octopus");
+                    primaryStage.close();
 
                 }
 
