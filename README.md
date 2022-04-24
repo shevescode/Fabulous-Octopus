@@ -17,9 +17,3 @@ Join to amazing adventure!
 - Spider - low health, low attack, moves twice faster and can walk on walls, chance to duplicate
 - Wizard - high health, hight attack, teleport to random location when he fully loaded his mana
 - Ghost - medium health, medium attack, can move everywhere, can haunt you ;)
-
-TODO:
-- add monster loot
-- add more levels
-- add more eye catching inventory
-- add menu
